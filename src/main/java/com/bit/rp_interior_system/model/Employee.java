@@ -2,6 +2,8 @@ package com.bit.rp_interior_system.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,8 +17,8 @@ import java.time.LocalDateTime;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
     private Integer id;
 
     @Column(name = "emp_no")
@@ -56,12 +58,14 @@ public class Employee {
     private LocalDate dob;
 
     @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "nic")
+    @Column(name = "updated_at")
+    @LastModifiedDate
     private LocalDateTime lastModify;
 
-    @Column(name = "nic")
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @ManyToOne

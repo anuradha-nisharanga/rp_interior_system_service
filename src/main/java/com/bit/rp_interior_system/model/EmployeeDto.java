@@ -12,5 +12,11 @@ public class EmployeeDto {
     private String nic;
     private String email;
     private String fullName;
+    private String callingName;
     private String mobile;
+    private String landNo;
+    private String address;
+    private String note;
+    private EmployeeStatus employeeStatus;
+    private Designation designation;
 }
