@@ -1,16 +1,18 @@
 package com.bit.rp_interior_system.service;
 
 import com.bit.rp_interior_system.model.Employee;
-import com.bit.rp_interior_system.model.EmployeeDto;
+import com.bit.rp_interior_system.model.dto.EmployeeDto;
 
 import java.util.List;
 
 public interface EmployeeService {
-    EmployeeDto createEmployee(EmployeeDto employeeDto);
+    String createEmployee(EmployeeDto employeeDto);
 
     List<Employee> getAllEmployees();
 
-    EmployeeDto updateEmployee(Integer id,EmployeeDto employeeDto);
+    String updateEmployee(EmployeeDto employeeDto);
 
-    void deleteEmployee(Integer id);
+    String deleteEmployee(EmployeeDto employeeDto);
+
+    List<Employee> selectEmployeesWithoutUserAccount();
 }

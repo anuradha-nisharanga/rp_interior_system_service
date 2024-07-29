@@ -33,6 +33,21 @@ public class Employee {
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "updated_at")
+    @LastModifiedDate
+    private LocalDateTime lastModify;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_status_id", referencedColumnName = "id")
+    private EmployeeStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "designation_id", referencedColumnName = "id")
+    private Designation designation;
+
     @Column(name = "calling_name")
     private String callingName;
 
@@ -55,25 +70,9 @@ public class Employee {
     private String civilStatus;
 
     @Column(name = "date_of_birth")
-    private LocalDate dob;
+    private LocalDate dateOfBirth;
 
     @Column(name = "created_at")
     @CreatedDate
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime lastModify;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_status_id", referencedColumnName = "id")
-    private EmployeeStatus employeeStatus;
-
-    @ManyToOne
-    @JoinColumn(name = "designation_id", referencedColumnName = "id")
-    private Designation designation;
-
 }
