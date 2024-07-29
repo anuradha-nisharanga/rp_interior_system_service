@@ -1,0 +1,115 @@
+<!--<div th:fragment = sidebarfragment>-->
+<!--    <ul class="nav flex-column">-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link active" aria-current="page" href="/dashboard/ui">Dashboard</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" aria-current="page" href="/employee/ui">Employee Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="/user/ui">User Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="/privilege/ui">Privilege Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Inventory Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Supplier Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Purchase-order Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Product Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Production Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Payment Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="/customer/ui">Customer Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Sales Management</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Generate Report</a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
+<head th:replace = "~{common/header :: headerModuleFragment}">
+
+</head>
+<nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse" th:fragment="sidebarfragment">
+    <div class="position-sticky">
+
+        <!--Logo Section-->
+        <div class="logo mt-0"><span>RP Interiors</span></div>
+
+        <!--Side Bar Elements-->
+        <a href="/dashboard/ui"> <i class="fa-solid fa-chart-line icon"></i> Dashboard</a>
+        <hr> <!-- Horizontal line -->
+        <a href="/employee/ui"> <i class="fa-solid fa-address-card icon"></i> Employee</a>
+        <hr> <!-- Horizontal line -->
+        <a href="/user/ui"> <i class="fa-solid fa-user icon"></i> User</a>
+        <hr> <!-- Horizontal line -->
+        <a href="/privilege/ui"> <i class="fa-solid fa-shield icon"></i> Privilege </a>
+        <hr> <!-- Horizontal line -->
+        <a href="#contact"> <i class="fa-solid fa-warehouse icon"></i> Inventory</a>
+        <hr> <!-- Horizontal line -->
+        <button class="dropdown-btn"> <i class="fa-solid fa-cart-shopping icon"></i> Purchase<i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="#"><i class="fa-solid fa-truck icon"></i>Supplier </a>
+            <a href="/material/ui">Material</a>
+            <a href="#">Purchase Order</a>
+            <a href="#">GRN</a>
+            <a href="#">Supplier Payments</a>
+        </div>
+        <hr> <!-- Horizontal line -->
+        <button class="dropdown-btn"> <i class="fa-solid fa-gift icon"></i> Product<i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="#"><i class="fa-solid fa-industry icon"></i>Production </a>
+        </div>
+        <hr> <!-- Horizontal line -->
+        <button class="dropdown-btn"> <i class="fa-solid fa-store icon"></i>Sales<i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="#"><i class="fa-solid fa-money-bill icon"></i>Payment</a>
+            <a href="/customer/ui"> <i class="fa-sharp fa-solid fa-person icon"></i> Customer</a>
+        </div>
+        <hr> <!-- Horizontal line -->
+        <button class="dropdown-btn"> <i class="fa-solid fa-file icon"></i>Reports<i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+            <a href="/report/sales"> <i class="fa-solid fa-file icon"></i>Sales Report</a>
+            <a href="/report/customers"> <i class="fa-solid fa-file icon"></i>Customer Report</a>
+        </div>
+    </div>
+</nav>
+
+<body>
+    <script>
+        /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content -
+   This allows the user to have multiple dropdowns without any conflict */
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>

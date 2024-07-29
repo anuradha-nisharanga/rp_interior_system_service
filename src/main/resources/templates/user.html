@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace = "~{common/header :: headerModuleFragment}">
+
+    //define in controller module
+    <title th:replace =" ~{ header :: headerModuleFragment}"></title>
+
+    <link rel="stylesheet" href="/resource/CSS/employee.css">
+    <link rel="stylesheet" href="/resource/CSS/user.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav th:replace =" ~{ common/navbar :: navbarfragment }"></nav>
+        </div>
+        <div class="row">
+            <div class="left col-2">
+                <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
+            </div>
+            <div class="right col-10 user-main">
+                <div class="d-flex justify-content-md-end flex-wrap flex-md-nowrap align-items-center mt-4 pt-3 pb-2 mb-3 border-bottom">
+                    <button type="button" class="btn btn-secondary btn-sm" style="margin-right: 25px;">Print User Table</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUserAddForm" >Add User</button>
+                </div>
+                <div class="row mt-5">
+                    <table class="table table-striped table-borderless" id="userTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="action-button">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="modalUserAddForm">
+                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header fw-bold">User Details
+                                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- form body -->
+                                <div class="card-body">
+                                    <form onsubmit="return false" id="userForm">
+                                        <div class="row">
+                                            <!-- form area-->
+                                            <div class="col-6">
+                                                <!-- Employee list -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userEmployee" class="form-label fw-bold">Employee list  : <span class="text-danger"> * </span></label>
+                                                    <select class="form-select" id="userEmployee" onchange="selectDFeildValidator(this,'','user','employee'); generateUserEmail()" aria-label="Default select" required>
+                                                    </select>
+                                                </div>
+                                                <!-- Username -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userUserName" class="form-label fw-bold">User Name : <span class="text-danger"> * </span></label>
+                                                    <input type="text" class="form-control" id="userUserName" onkeyup ="textFeildValidator(userUserName ,'^[a-zA-Z0-9]{5,16}$','user','username')" placeholder="Enter Username" required>
+                                                </div>
+                                                <!-- Email -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userEmail" class="form-label fw-bold">Email : <span class="text-danger"> * </span></label>
+                                                    <input type="text" class="form-control" id="userEmail" placeholder="Enter Email" onkeyup="textFeildValidator(userEmail ,'^[A-Za-z0-9]{6,20}[@][a-z]{3,10}[.][a-z]{2,3}$','user','email')" data-bs-placement="bottom" required>
+                                                </div>
+                                                <!--Image Url-->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userImage" class="form-label fw-bold">Upload Image : <span class="text-danger"> * </span></label>
+                                                    <input class="form-control" type="file" id="userImage">
+                                                </div>
+                                                <!--User Account active -->
+                                                <div class="form-check form-check-inline">
+                                                    <input type ="checkbox" class="form-check-input" id="userStatus" onchange="checkBoxValidator(this,'','user','status',true,false,chkLblUserStatus, 'User Account is Active', 'User Account is Deactivated')" checked>
+                                                    <label for="userStatus" id="chkLblUserStatus" class="form-check-label fw-bold" >User Account is Active</label>
+                                                </div>
+                                            </div>
+                                            <!-- form right area -->
+                                            <div class="col-6">
+                                                <!-- Password -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userPassword" class="form-label fw-bold">Password : <span class="text-danger"> * </span></label>
+                                                    <input type="text" class="form-control" id="userPassword" onkeyup ="textFeildValidator(userPassword,'^[a-zA-Z0-9]{5,16}$','user','password')" placeholder="Enter Password" required>
+                                                </div>
+                                                <!-- Re Type Password -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userReTypePassword" class="form-label fw-bold">Re Type Password : <span class="text-danger"> * </span></label>
+                                                    <input type="text" class="form-control" id="userReTypePassword" onkeyup ="passwordRTValidator()" placeholder="Enter Password" required>
+                                                </div>
+                                                <!-- Role -->
+                                                <div id="divRoles">
+
+                                                </div>
+                                                <!-- note -->
+                                                <div class="mb-3 col-6">
+                                                    <label for="userNote" class="form-label fw-bold">Note  : <span class="text-danger"> (Optional) </span></label>
+                                                    <textarea class="form-control" placeholder="leave a note" id="userNote" cols="30" name="note"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- form buttons -->
+                                        <div class="row mt-4">
+                                            <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                                                <button type="reset" class="btn btn-secondary fw-bold me-md-1">Reset</button>
+                                                <button type="submit" class="btn btn-primary fw-bold" id="userAddButton" onclick="buttonUserAdd()">Submit</button>
+                                                <button type="submit" class="btn btn-success fw-bold" id="userUpdateButton" onclick="buttonUserUpdate()">Update</button>
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src ="/resource/ControllerJS/user.js"></script>
+<script src="/resource/Common%20JS/sidebar.js"></script>
+</html>

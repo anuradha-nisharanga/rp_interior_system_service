@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace = "~{common/header :: headerModuleFragment}">
+
+    //define in controller module
+    <title th:replace =" ~{ header :: headerModuleFragment}"></title>
+
+    <link rel="stylesheet" href="/resource/CSS/employee.css">
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:replace =" ~{ common/navbar :: navbarfragment }"></nav>
+    </div>
+    <div class="row">
+        <div class="left col-2">
+            <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
+        </div>
+        <div class="right col-10">
+            <div class="d-flex justify-content-md-end flex-wrap flex-md-nowrap align-items-center mt-4 pt-3 pb-2 mb-3 border-bottom">
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-right: 25px;">Print Table</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPrivilegeAddForm" >Add Privilege</button>
+            </div>
+            <div class="row mt-5">
+                <table class="table table-striped table-borderless" id="privilegeTable">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Module</th>
+                        <th scope="col">View</th>
+                        <th scope="col">Create</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Remove</th>
+                        <th scope="col" class="action-button">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal" data-bs-keyboard="false" id="modalPrivilegeAddForm" data-bs-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header fw-bold">Privilege Details
+                            <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- form body -->
+                            <div class="card-body">
+                                <form onsubmit="return false" id="privilegeForm">
+                                    <div class="row">
+                                        <!-- form area-->
+                                        <div class="col-6">
+                                            <!-- Role list -->
+                                            <div class="mb-3 col-6">
+                                                <label for="privilegeRole" class="form-label fw-bold">Role list  : <span class="text-danger"> * </span></label>
+                                                <select class="form-select" id="privilegeRole" onchange="selectDFeildValidator(this,'','privilege','role'); generateModuleList()" aria-label="Default select" required>
+                                                </select>
+                                            </div>
+                                            <!-- Module list -->
+                                            <div class="mb-3 col-6">
+                                                <label for="privilegeModule" class="form-label fw-bold">Module list  : <span class="text-danger"> * </span></label>
+                                                <select class="form-select" id="privilegeModule" onchange="selectDFeildValidator(this,'','privilege','module')" aria-label="Default select" required>
+                                                </select>
+                                            </div>
+                                            <!-- Select -->
+                                            <div class="mb-3 col-6">
+                                                <label for="checkBoxView" class="form-label fw-bold">Select : </label>
+                                                <input type="checkbox" class="form-check-input" id="checkBoxView" onchange="checkBoxValidator(this,'','privilege','view',true,false,labelCBView, 'Granted', 'Not-Granted')">
+                                                <label for="checkBoxView" id="labelCBView" class="form-check-label" >Not-Granted</label>
+                                            </div>
+                                            <!-- Create -->
+                                            <div class="mb-3 col-6">
+                                                <label for="checkBoxInsert" class="form-label fw-bold">Create : </label>
+                                                <input type="checkbox" class="form-check-input" id="checkBoxInsert" onchange="checkBoxValidator(this,'','privilege','create',true,false,labelCBAdd, 'Granted', 'Not-Granted')">
+                                                <label for="checkBoxInsert" id="labelCBAdd" class="form-check-label" >Not-Granted</label>
+                                            </div>
+                                            <!-- Edit -->
+                                            <div class="mb-3 col-6">
+                                                <label for="checkBoxEdit" class="form-label fw-bold">Edit : </label>
+                                                <input type="checkbox" class="form-check-input" id="checkBoxEdit" onchange="checkBoxValidator(this,'','privilege','edit',true,false,labelCBEdit, 'Granted', 'Not-Granted')">
+                                                <label for="checkBoxEdit" id="labelCBEdit" class="form-check-label" >Not-Granted</label>
+                                            </div>
+                                            <!-- Delete -->
+                                            <div class="mb-3 col-6">
+                                                <label for="checkBoxDelete" class="form-label fw-bold">Delete : </label>
+                                                <input type="checkbox" class="form-check-input" id="checkBoxDelete" onchange="checkBoxValidator(this,'','privilege','remove',true,false,labelCBRemove, 'Granted', 'Not-Granted')">
+                                                <label for="checkBoxDelete" id="labelCBRemove" class="form-check-label" >Not-Granted</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- form buttons -->
+                                    <div class="row mt-4">
+                                        <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <button type="reset" class="btn btn-secondary fw-bold me-md-1">Reset</button>
+                                            <button type="submit" class="btn btn-primary fw-bold" id="addPrivilegeButton" onclick="buttonPrivilegeAdd()">Submit</button>
+                                            <button type="submit" class="btn btn-success fw-bold" id="updatePrivilegeButton" onclick="buttonPrivilegeUpdate()">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script src ="/resource/ControllerJS/privilege.js"></script>
+<script src="/resource/Common%20JS/sidebar.js"></script>
+</html>
