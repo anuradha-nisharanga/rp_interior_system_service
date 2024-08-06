@@ -45,6 +45,9 @@ public class Material {
     @Column(name = "reorder_point")
     private Integer reorderPoint;
 
+    @Column(name = "note")
+    private String note;
+
     @Column(name = "status")
     private Boolean status;
 
@@ -68,8 +71,8 @@ public class Material {
     private User createdUser;
 
     @Column(name = "updated_user")
-    private Integer updated_user;
+    private Integer updatedUser;
 
     @Column(name = "deleted_user")
-    private Integer deleted_user;
+    private Integer deletedUser;
 }

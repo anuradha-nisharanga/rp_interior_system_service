@@ -31,7 +31,8 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Code</th>
-                        <th scope="col">Material Name</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Reorder Point</th>
                         <th scope="col">Unit Price</th>
@@ -95,8 +96,8 @@
 
                                             <!-- material category -->
                                             <div class="mb-3 col-10">
-                                                <label for="materialCategory" class="form-label fw-bold">Designation  : <span class="text-danger"> * </span></label>
-                                                <select class="form-select" id = "materialCategory" aria-label="Default select" onchange="selectDFeildValidator(materialCategory, '', 'material', 'designation')" name ="designation" required>
+                                                <label for="materialCategory" class="form-label fw-bold">Category  : <span class="text-danger"> * </span></label>
+                                                <select class="form-select" id = "materialCategory" aria-label="Default select" onchange="selectDFeildValidator(materialCategory, '', 'material', 'materialCategory')" name ="materialCategory" required>
 
                                                 </select>
                                             </div>
@@ -126,12 +127,15 @@
     </div>
 
 </div>
-<script src="/resource/Common%20JS/jquery.js"></script>
 
+<!--link JQuery-->
+<script src="/resource/Common%20JS/jquery.js"></script>
 <!--link datatable js file -->
 <script src="/resource/DataTables-1.13.8/js/jquery.dataTables.js"></script>
+<!--link SideBar Js File-->
+<script src="/resource/Common%20JS/sidebar.js"></script>
 
 <script src ="/resource/ControllerJS/material.js"></script>
-<script src="/resource/Common%20JS/sidebar.js"></script>
+
 </body>
 </html>

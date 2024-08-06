@@ -5,7 +5,7 @@ window.addEventListener('load',()=>{
 
     refreshMaterialTable();
     reFreshMaterialForm();
-    // customer.status = true;
+    material.status = false;
 })
 const refreshMaterialTable = () =>{
 
@@ -15,19 +15,19 @@ const refreshMaterialTable = () =>{
     const displayProperty = [
         {property:'code', datatype:'string'},
         {property:'name', datatype:'string'},
+        {property: getMaterialCategory, datatype:'function'},
         {property:'quantity', datatype:'number'},
         {property:'reorderPoint', datatype:'number'},
         {property:'unitPrice', datatype:'number'},
-        {property: getMaterialCategory, datatype:'function'},
         {property:getStatus, datatype:'function'}]
 
-    fillDataIntoTable(materialTable, materials ,displayProperty ,refillCustomerForm, deleteEmployees, printEmployee, true, userPrivilege);
+    fillDataIntoTable(materialTable, materials ,displayProperty ,refillMaterialForm, deleteMaterials, printEmployee, true, userPrivilege);
 
     //disable delete button
     materials.forEach((element, index) => {
         if(element.status === false){
             if (userPrivilege.delete) {
-                materialTable.children[1].children[index].children[7].children[1].disabled = "true"; //you can also use disabled
+                materialTable.children[1].children[index].children[8].children[1].disabled = "true"; //you can also use disabled
             }
         }
     });
@@ -41,35 +41,35 @@ const refreshMaterialTable = () =>{
 
 
 //create refill function
-const refillCustomerForm =(rowOb,rowInd)=>{
+const refillMaterialForm =(rowOb,rowInd)=>{
     $('#modalMaterialAddForm').modal('show');
 
-    customer = JSON.parse(JSON.stringify(rowOb));
-    oldCustomer = JSON.parse(JSON.stringify(rowOb));
+    material = JSON.parse(JSON.stringify(rowOb));
+    oldMaterial = JSON.parse(JSON.stringify(rowOb));
 
-    console.log(customer);
-    console.log(oldCustomer);
+    console.log(material);
+    console.log(material);
 
-    customerName.value = customer.name;
-    customerNic.value = customer.nic;
-    customerMobile.value = customer.mobile;
-    customerEmail.value = customer.email;
-    customerAddress.value = customer.address;
-    customerStatus.value = customer.status;
+    materialName.value = material.name;
+    materialQty.value = material.quantity;
+    materialReorderPoint.value = material.reorderPoint;
+    materialUnitPrice.value = material.unitPrice;
+    materialNote.value = material.note;
+    materialCategory.value = material.materialCategory;
 
-    if(customer.note != null)
-        customerNote.value = customer.note; else customerNote.value = "";
+    if(material.note != null)
+        materialNote.value = material.note; else materialNote.value = "";
     console.log(userPrivilege);
 
-    customerAddButton.disabled = "true";
-    $("#customerAddButton").css("cursor","not-allowed");
+    materialAddButton.disabled = "true";
+    $("#materialAddButton").css("cursor","not-allowed");
 
     if(userPrivilege.update) {
-        customerUpdateButton.disabled = "";
-        $("#customerUpdateButton").css("cursor","pointer");
+        materialUpdateButton.disabled = "";
+        $("#materialUpdateButton").css("cursor","pointer");
     }else{
-        customerUpdateButton.disabled = "true";
-        $("#customerUpdateButton").css("cursor","not-allowed");
+        materialUpdateButton.disabled = "true";
+        $("#materialUpdateButton").css("cursor","not-allowed");
     }
 }
 
@@ -80,21 +80,15 @@ const printEmployee = (rowOb, rowInd) => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.status == true) {
-        return '<p class= "btn btn-outline-success">' + "Active" +'</p>';
+        return '<p class= "btn btn-outline-success">' + "Available" +'</p>';
     }
     if (rowOb.status == false) {
-        return '<p class = "btn btn-outline-dark">' + "In-Active" +'</p>';
+        return '<p class = "btn btn-outline-dark">' + "NA" +'</p>';
     }
 }
 
 const getMaterialCategory = (rowOb) =>{
-    console.log('status')
-    if (rowOb.designation.name === 'Admin') {
-        return '<p class= "btn btn-outline-success">' + rowOb.designation.name +'</p>';
-    }
-    if (rowOb.designation.name === 'Manager') {
-        return '<p class = "btn btn-outline-dark">' + rowOb.designation.name +'</p>';
-    }
+    return rowOb.materialCategory.name;
 }
 
 const reFreshMaterialForm = () => {
@@ -103,7 +97,11 @@ const reFreshMaterialForm = () => {
     // get material category list
     materialCategoryList = ajaxGetRequest("/material/material-categories")
 
-    fillDataIntoSelect( materialCategory, 'Select Material*', materialCategoryList, 'designationName');
+    /*
+    element attribute id/ selected value/ category list/ object attribute name
+    */
+
+    fillDataIntoSelect( materialCategory, 'Select Material*', materialCategoryList, 'name');
 
     //need to empty all element
     materialName.value = '';
@@ -151,6 +149,10 @@ const checkError = () => {
         errors = errors + 'please Enter Valid Reorder Point...! \n';
     }
 
+    if (material.materialCategory == null) {
+        errors = errors + 'please Enter Valid Reorder Point...! \n';
+    }
+
     return errors;
 }
 
@@ -195,35 +197,39 @@ const buttonMaterialAdd = () =>{
 const checkUpdate = ()=>{
     let updates = "";
 
-    if (customer.name != oldCustomer.name){
-        updates = updates + "customer name is change " + oldCustomer.name + "into" + customer.name + "\n";
+    if (material.name != oldMaterial.name){
+        updates = updates + "material name is change " + oldMaterial.name + "into" + material.name + "\n";
     }
 
-    if(customer.mobile != oldCustomer.mobile){
-        updates = updates + "mobile is change " + oldCustomer.mobile + "into" + customer.mobile + "\n";
+    if(material.quantity != oldMaterial.quantity){
+        updates = updates + "quantity is change " + oldMaterial.quantity + "into" + material.quantity + "\n";
     }
 
-    if(customer.nic != oldCustomer.nic){
-        updates = updates + "nic is change " + oldCustomer.nic + "into" + customer.nic + "\n";
+    if(material.reorderPoint != oldMaterial.reorderPoint){
+        updates = updates + "reorder point is change " + oldMaterial.reorderPoint + "into" + material.reorderPoint + "\n";
     }
 
-    if(customer.address != oldCustomer.address){
-        updates = updates + "address is change " + oldCustomer.address + "into" + customer.address + "\n";
+    if(material.unitPrice != oldMaterial.unitPrice){
+        updates = updates + "unit price is change " + oldMaterial.unitPrice + "into" + material.unitPrice + "\n";
     }
 
-    if(customer.email != oldCustomer.email){
-        updates = updates + "address is change " + oldCustomer.email + "into" + customer.email + "\n";
+    if(material.note != oldMaterial.note){
+        updates = updates + "note is change " + oldMaterial.note + "into" + material.note + "\n";
     }
 
-    if(customer.status != oldCustomer.status){
+    if(material.status != oldMaterial.status){
         updates = updates + "status is change \n";
+    }
+
+    if (material.materialCategory != oldMaterial.materialCategory){
+        updates = updates + "material category is change" + oldMaterial.materialCategory + "into" + material.materialCategory + "\n";
     }
 
     return updates;
 }
 
 //define function for employee update
-const buttonCustomerUpdate = () =>{
+const buttonMaterialUpdate = () =>{
     console.log("Update button");
     //check from error
     let error = checkError();
@@ -234,12 +240,12 @@ const buttonCustomerUpdate = () =>{
             //cell put service
             let userConfirm = confirm("Are you sure following changer...? \n" + updates);
             if(userConfirm){
-                let updateServicesResponses = ajaxRequestBody("/customer/update","PUT", customer);
+                let updateServicesResponses = ajaxRequestBody("/material/update","PUT", material);
                 if (updateServicesResponses == "OK") {
                     alert('Update Successfully......!' );
                     //need to refresh table and form
-                    refreshCustomerTable();
-                    customerForm.reset();
+                    refreshMaterialTable();
+                    materialForm.reset();
                     reFreshMaterialForm();
                     //need to hide modal
                     $('#modalMaterialAddForm').modal('hide');
@@ -257,19 +263,18 @@ const buttonCustomerUpdate = () =>{
     }
 }
 
-const deleteEmployees =(rowOb, rowInd) =>{
-    const userConfirm = confirm('Do you want to delete this Customer \n' + rowOb.name);
+const deleteMaterials =(rowOb, rowInd) =>{
+    const userConfirm = confirm('Do you want to delete this Material \n' + rowOb.name);
 
     if (userConfirm) {
-        let serverResponse = ajaxRequestBody("/customer/delete", "DELETE", rowOb);
+        let serverResponse = ajaxRequestBody("/material/delete", "DELETE", rowOb);
         if (serverResponse == "OK") {
             alert('Delete Successfully......!' );
             //need to refresh table and form
-            refreshCustomerTable();
-
+            refreshMaterialTable();
 
         } else {
-            alert('Delete Not Sucessfully....! Have Some Errors \n' + serverResponse);
+            alert('Delete Not Successfully....! Have Some Errors \n' + serverResponse);
         }
     }
 }

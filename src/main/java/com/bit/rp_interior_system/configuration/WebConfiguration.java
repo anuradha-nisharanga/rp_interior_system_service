@@ -29,6 +29,7 @@ public class WebConfiguration {
                             .requestMatchers("/privilege/**").hasAnyAuthority("Admin","Manager","Production Manager")
                             .requestMatchers("/material/**").hasAnyAuthority("Admin","Manager","StoreKeeper")
                             .requestMatchers("/customer/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/supplier/**").hasAnyAuthority("Admin","Manager")
                             .anyRequest().authenticated();
 
                 })

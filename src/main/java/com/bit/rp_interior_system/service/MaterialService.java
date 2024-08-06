@@ -14,5 +14,9 @@ public interface MaterialService {
     List<Material> getMaterialDetails();
 
     List<MaterialCategory> getMaterialCategoryList();
+
+    String updateMaterial(MaterialDto materialDto);
+
+    String deleteMaterial(MaterialDto materialDto);
 }
 
