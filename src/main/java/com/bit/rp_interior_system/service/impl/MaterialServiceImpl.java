@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class MaterialServiceImpl implements MaterialService {
     private final PrivilegeService privilegeService;
     private final UserRepository userRepository;
     private final MaterialCategoryRepository materialCategoryRepository;
+
     @Override
     public String createMaterial(MaterialDto materialDto) {
 
@@ -44,6 +46,7 @@ public class MaterialServiceImpl implements MaterialService {
                 .image(materialDto.getImage())
                 .createdDate(LocalDateTime.now())
                 .quantity(materialDto.getQuantity())
+                .note(materialDto.getNote())
                 .status(materialDto.getStatus())
                 .unitPrice(materialDto.getUnitPrice())
                 .reorderPoint(materialDto.getReorderPoint())
@@ -83,7 +86,68 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public String updateMaterial(MaterialDto materialDto) {
+
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        if(!logUserPrivilege.get("update")){
+            return null;
+        }
+
+        Optional<Material> materialOptional = materialRepository.findById(materialDto.getId());
+        if (materialOptional.isEmpty()){
+            throw new RuntimeException("Material not found");
+        }
+
+        Material material = materialOptional.get();
+        material.setName(materialDto.getName());
+        material.setMaterialCategory(materialDto.getMaterialCategory());
+        material.setUnitPrice(materialDto.getUnitPrice());
+        material.setNote(materialDto.getNote());
+        material.setQuantity(materialDto.getQuantity());
+
+        User logedUser = userRepository.getUserByUserName(auth.getName());
+        material.setUpdatedUser(logedUser.getId());
+        try {
+           materialRepository.save(material);
+            return "OK";
+        }
+        catch (Exception e){
+            return "update not completed : " + e.getMessage();
+        }
+    }
+
+    @Override
+    public String deleteMaterial(MaterialDto materialDto) {
+
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        if(!logUserPrivilege.get("delete")){
+            return null;
+        }
+
+        Optional<Material> optionalMaterial = materialRepository.findById(materialDto.getId());
+        if (optionalMaterial.isEmpty()){
+            throw new RuntimeException("Material Not Found");
+        }
+
+        try {
+            Material material = optionalMaterial.get();
+            material.setStatus(false);
+            materialRepository.save(material);
+            return "OK";
+        }
+        catch (Exception e){
+            return "Delete not completed : " + e.getMessage();
+        }
+    }
+
+    @Override
     public List<MaterialCategory> getMaterialCategoryList() {
         return materialCategoryRepository.findAll();
     }
+
+
 }

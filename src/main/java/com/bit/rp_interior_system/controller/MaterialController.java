@@ -27,11 +27,23 @@ public class MaterialController {
 
     @GetMapping("/view")
     public List<Material> getMaterialsList(){
+
         return materialService.getMaterialDetails();
+    }
+
+    @PutMapping("/update")
+    public String updateMaterial(@RequestBody MaterialDto materialDto){
+        return materialService.updateMaterial(materialDto);
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteMaterial(@RequestBody MaterialDto materialDto){
+        return materialService.deleteMaterial(materialDto);
     }
 
     @GetMapping("/material-categories")
     public List<MaterialCategory> getMaterialCategoryList(){
+
         return materialService.getMaterialCategoryList();
     }
 

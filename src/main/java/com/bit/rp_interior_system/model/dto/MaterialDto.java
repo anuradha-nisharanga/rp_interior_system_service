@@ -12,10 +12,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class MaterialDto {
 
+    private Integer id;
     private String name;
     private String code;
     private String description;
     private String image;
+    private String note;
     private Integer quantity;
     private BigDecimal unitPrice;
     private Integer reorderPoint;

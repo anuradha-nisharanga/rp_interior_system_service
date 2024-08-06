@@ -129,7 +129,8 @@ const radioValidator =(feildId ,pattern, object, property,l1,l2)=>{
 const checkBoxValidator =(feildId ,pattern, object, property,trueValue,falseValue,labelId,labelTrueValue,labelFalseValue)=>{
   
     if (feildId.checked) {
-     window[object][property] = trueValue;  
+     window[object][property] = trueValue;
+        console.log("supplier active tick check:" + window[object][property])
      labelId.innerText = labelTrueValue;
   
     } else {

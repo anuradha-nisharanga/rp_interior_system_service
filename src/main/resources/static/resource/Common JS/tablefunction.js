@@ -27,12 +27,12 @@ const fillDataIntoTable= (tableId, dataList, propertyList, editButtonFunction, d
            td.innerText = dataList[ind][itemob.property];
        }
        tr.appendChild(td); 
-   
+
     }
-   
-    
+
+
     const tdButton = document.createElement('td');
-    const buttonEdit = document.createElement('td');
+    const buttonEdit = document.createElement('button');
     buttonEdit.className = 'btn btn-warning  me-1';
     buttonEdit.innerHTML = '<i class = "fa-solid fa-edit"></i>Edit';
 
@@ -50,7 +50,7 @@ const fillDataIntoTable= (tableId, dataList, propertyList, editButtonFunction, d
         deleteButtonFunction(item,ind);
     }
 
-    const buttonPrint = document.createElement('td');
+    const buttonPrint = document.createElement('button');
     buttonPrint.className = 'btn btn-info ';
     buttonPrint.innerHTML = '<i class = "fa-solid fa-info"></i>Print';
     buttonPrint.onclick = () =>{
