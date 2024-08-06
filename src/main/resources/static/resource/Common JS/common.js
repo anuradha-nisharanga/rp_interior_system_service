@@ -47,13 +47,18 @@ const ajaxRequestBody = (url, method, object)=>{
 
 const fillDataIntoSelect = (fieldId, message, dataList, property, selectedValue) =>{
     fieldId.innerHTML = '';
-    let optionMessage = document.createElement('option');
-    optionMessage.value = '';
-    optionMessage.selected = 'selected';
-    optionMessage.disabled = 'disabled';
-    optionMessage.innerText = message;
 
-    fieldId.appendChild(optionMessage);
+    if (message != ""){
+
+        let optionMessage = document.createElement('option');
+        optionMessage.value = '';
+        optionMessage.selected = 'selected';
+        optionMessage.disabled = 'disabled';
+        optionMessage.innerText = message;
+
+        fieldId.appendChild(optionMessage);
+    }
+
 
     for (const ob of dataList) {
     let option = document.createElement('option');
@@ -64,5 +69,32 @@ const fillDataIntoSelect = (fieldId, message, dataList, property, selectedValue)
     }
     fieldId.appendChild(option);
         
+    }
+}
+
+const fillMultipleSelectComponent = (fieldId, message, dataList, propertyOne, propertyTwo, selectedValue) =>{
+
+    fieldId.innerHTML = '';
+
+    if (message != ""){
+
+        let optionMessage = document.createElement('option');
+        optionMessage.value = '';
+        optionMessage.selected = 'selected';
+        optionMessage.disabled = 'disabled';
+        optionMessage.innerText = message;
+
+        fieldId.appendChild(optionMessage);
+    }
+
+    for (const ob of dataList) {
+        let option = document.createElement('option');
+        option.value = JSON.stringify(ob); // convert into json string
+        option.innerText = "(" + ob[propertyTwo] + ")" + ob[propertyOne];
+        if(selectedValue == ob[propertyTwo] ){
+            option.selected = 'selected';
+        }
+        fieldId.appendChild(option);
+
     }
 }

@@ -46,6 +46,16 @@ const refillSupplierForm =(rowOb,rowInd)=>{
 
     console.log(supplier);
 
+    // get the supplier not providing materials list
+    supllierNotProvidedItemList = ajaxGetRequest("/material/supplier-not-provide/" + supplier.id);
+
+    // select data into not selected side which supplier not providing materials
+    fillMultipleSelectComponent(selectAllItems, '', supllierNotProvidedItemList, 'name', 'code');
+
+    // select data into selected side
+    fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');
+
+
     supplierName.value = supplier.name;
     supplierEmail.value = supplier.email;
     supplierMobile.value = supplier.mobile;
@@ -102,13 +112,12 @@ const checkError = () => {
     return errors;
 }
 
-
 const buttonSupplierAdd = () =>{
 
     //1.need to check form errors --> checkError()
     let formErrors = checkError()
     if (formErrors == '') {
-
+        console.log(supplier)
         //2.need to get user confirmation
         let userConfirm = window.confirm('Are you sure to add this Supplier?\n'
             + '\n Supplier Name is : ' + supplier.name  + '\n Supplier Email  is : ' + supplier.email);
@@ -145,6 +154,16 @@ const printSupplier = () =>{
 const reFreshSupplierForm = () => {
 
     supplier = {};
+
+    supplier.materials = [];
+
+    materialList = ajaxGetRequest("/material/available-list")
+
+    // Initially available items list need to be show
+    fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code')
+
+    // Initially Selected items need to be empty
+    fillMultipleSelectComponent(selectedAllItems, '', "", 'name', 'code')
 
     //need to empty all element
     supplierName.value = '';
@@ -210,7 +229,6 @@ const checkUpdate = ()=>{
     return updates;
 }
 
-
 const buttonSupplierUpdate = () =>{
     console.log("Update button");
     //check from error
@@ -259,4 +277,68 @@ const deleteMaterials =(rowOb, rowInd) =>{
             alert('Delete Not Successfully....! Have Some Errors \n' + serverResponse);
         }
     }
+}
+
+
+// multiple select component operators functions
+const btnAddOneItem = () =>{
+    console.log(selectAllItems.value);
+    if (selectAllItems.value == ""){
+        alert("Please Select an Item")
+    }
+    else{
+        let selectedItem = JSON.parse(selectAllItems.value);
+        supplier.materials.push(selectedItem);
+        fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');
+
+        let extIndex = materialList.map(material => material.name).indexOf(selectedItem.name);
+        if (extIndex != -1){
+            materialList.splice(extIndex, 1)
+        }
+        fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code');
+    }
+
+
+}
+
+const btnAddAllItem = () =>{
+    materialList.forEach(material =>{
+        supplier.materials.push(material);
+    })
+    fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');
+
+    materialList = [];
+    fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code');
+
+}
+
+const btnRemoveOneItem = () =>{
+    console.log(selectedAllItems.value);
+    if (selectedAllItems.value == ""){
+        alert("Please Select an Item")
+    }
+    else{
+        let selectedItem = JSON.parse(selectedAllItems.value);
+        materialList.push(selectedItem);
+        fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code');
+
+        let extIndex = supplier.materials.map(material => material.name).indexOf(selectedItem.name);
+        if (extIndex != -1){
+            supplier.materials.splice(extIndex, 1)
+        }
+        fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');
+    }
+}
+
+const btnRemoveAllItem = () => {
+
+    supplier.materials.forEach(material =>{
+        materialList.push(material);
+    })
+
+    fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code');
+
+    supplier.materials = [];
+    fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');
+
 }

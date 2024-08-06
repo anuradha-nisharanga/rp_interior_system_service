@@ -59,6 +59,7 @@ public class SupplierServiceImpl implements SupplierService {
                 .mobile(supplierDto.getMobile())
                 .status(supplierDto.getStatus())
                 .note(supplierDto.getNote())
+                .materials(supplierDto.getMaterials())
                 .build();
 
         //set log user value

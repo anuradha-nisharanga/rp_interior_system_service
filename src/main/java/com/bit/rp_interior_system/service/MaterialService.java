@@ -18,5 +18,9 @@ public interface MaterialService {
     String updateMaterial(MaterialDto materialDto);
 
     String deleteMaterial(MaterialDto materialDto);
+
+    List<Material> getAvailableMaterial();
+
+    List<Material> getSupplierNotProvideMaterials(Integer supplierId);
 }
 

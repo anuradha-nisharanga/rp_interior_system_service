@@ -64,19 +64,19 @@
                                             <!-- Supplier name -->
                                             <div class="mb-3 col-10">
                                                 <label for="supplierName" class="form-label fw-bold">Supplier Name : <span class="text-danger"> * </span></label>
-                                                <input type="text" class="form-control" id="supplierName" onkeyup="textFeildValidator(supplierName ,'^(([A-Z][a-z]{3,20}[\\s])+([A-Z][a-z]{3,20}){1})$','supplier','name')" placeholder="John Suppliers" required>
+                                                <input type="text" class="form-control" id="supplierName" onkeyup="textFeildValidator(supplierName ,'^(([A-Z][a-z]{3,20}[\\s])+([A-Z][a-z]{3,20}){1})$','supplier','name')" placeholder="John Suppliers" name="sName" required>
                                             </div>
 
                                             <!-- Supplier Email -->
                                             <div class="mb-3 col-10">
                                                 <label for="supplierEmail" class="form-label fw-bold">Email : <span class="text-danger"> * </span></label>
-                                                <input type="email" class="form-control" id="supplierEmail" placeholder="supplier@gmail.com" onkeyup="textFeildValidator(supplierEmail ,'^[A-Za-z0-9]{6,20}[@][a-z]{3,10}[.][a-z]{2,3}$', 'supplier', 'email')" data-bs-toggle="tooltip" name="supplierEmail" data-bs-placement="bottom" data-bs-title="This top tooltip is themed via CSS variables." required>
+                                                <input type="email" class="form-control" id="supplierEmail" placeholder="supplier@gmail.com" onkeyup="textFeildValidator(supplierEmail ,'^[A-Za-z0-9]{6,20}[@][a-z]{3,10}[.][a-z]{2,3}$', 'supplier', 'email')" data-bs-toggle="tooltip" name="sEmail" data-bs-placement="bottom" data-bs-title="This top tooltip is themed via CSS variables." required>
                                             </div>
 
                                             <!-- Supplier Mobile -->
                                             <div class="mb-3 col-10">
                                                 <label for="supplierMobile" class="form-label fw-bold">Mobile  : <span class="text-danger"> * </span></label>
-                                                <input type="text" class="form-control" id="supplierMobile" placeholder="0700000000" aria-describedby="basic-addon1" onkeyup="textFeildValidator(supplierMobile ,'^[0][7][012345678][0-9]{7}$','supplier','mobile')" name="supplierMobile" required>
+                                                <input type="text" class="form-control" id="supplierMobile" placeholder="0700000000" aria-describedby="basic-addon1" onkeyup="textFeildValidator(supplierMobile ,'^[0][7][012345678][0-9]{7}$','supplier','mobile')" name="sMobile" required>
                                             </div>
                                         </div>
 
@@ -107,21 +107,24 @@
                                     <hr>
                                     <div class="row mt-2">
                                         <div class="col-5">
-                                            <select class="form-select" multiple aria-label="Multiple select example">
-                                                <option selected>Open this select menu</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            <label for="selectAllItems" class="form-label fw-bold"> Select Item </label>
+                                            <select class="form-select" multiple="" aria-label="Multiple select example" id="selectAllItems">
+
                                             </select>
                                         </div>
-                                        <div class="col-2"></div>
+                                        <div class="col-2 d-flex justify-content-center">
+                                            <div class="btn-group-vertical mt-2" role="group" aria-label="Vertical button group">
+                                                <button type="button" class="btn btn-light btn-sm" onclick="btnAddOneItem()"> > </button>
+                                                <button type="button" class="btn btn-light btn-sm" onclick="btnAddAllItem()"> >> </button>
+                                                <button type="button" class="btn btn-light btn-sm" onclick="btnRemoveOneItem()"> < </button>
+                                                <button type="button" class="btn btn-light btn-sm" onclick="btnRemoveAllItem()"> << </button>
+                                            </div>
+                                        </div>
 
                                         <div class="col-5">
-                                            <select class="form-select" multiple aria-label="Multiple select example">
-                                                <option selected>Open this select menu</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                            <label for="selectedAllItems" class="form-label fw-bold"> Selected Items </label>
+                                            <select class="form-select" multiple="" aria-label="Multiple select example" id="selectedAllItems">
+
                                             </select>
                                         </div>
                                     </div>
