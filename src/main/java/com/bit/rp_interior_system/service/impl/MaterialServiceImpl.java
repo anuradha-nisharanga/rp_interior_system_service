@@ -35,7 +35,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         //login user authentication and authorization
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
         if(!logUserPrivilege.get("insert")){
             throw new RuntimeException("Insert not completed: you have no privilege");
         }
@@ -76,7 +76,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         //login user authentication and authorization
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
         if(!logUserPrivilege.get("select")){
             return null;
         }
@@ -90,7 +90,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         //login user authentication and authorization
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
         if(!logUserPrivilege.get("update")){
             return null;
         }
@@ -123,7 +123,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         //login user authentication and authorization
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"customer");
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
         if(!logUserPrivilege.get("delete")){
             return null;
         }
@@ -145,7 +145,41 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public List<Material> getAvailableMaterial() {
+
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
+        if(!logUserPrivilege.get("select")){
+            return null;
+        }
+
+        return materialRepository.getAvailableMaterialList();
+    }
+
+    @Override
+    public List<Material> getSupplierNotProvideMaterials(Integer supplierId) {
+
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
+        if(!logUserPrivilege.get("select")){
+            return null;
+        }
+
+        return materialRepository.getSupplierNotProvideMaterials(supplierId);
+    }
+
+    @Override
     public List<MaterialCategory> getMaterialCategoryList() {
+
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"material");
+        if(!logUserPrivilege.get("select")){
+            return null;
+        }
+
         return materialCategoryRepository.findAll();
     }
 

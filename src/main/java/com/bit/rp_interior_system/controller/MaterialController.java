@@ -22,6 +22,7 @@ public class MaterialController {
 
     @PostMapping("/create")
     public String createMaterial(@RequestBody MaterialDto materialDto){
+
         return materialService.createMaterial(materialDto);
     }
 
@@ -33,11 +34,13 @@ public class MaterialController {
 
     @PutMapping("/update")
     public String updateMaterial(@RequestBody MaterialDto materialDto){
+
         return materialService.updateMaterial(materialDto);
     }
 
     @DeleteMapping("/delete")
     public String deleteMaterial(@RequestBody MaterialDto materialDto){
+
         return materialService.deleteMaterial(materialDto);
     }
 
@@ -45,6 +48,18 @@ public class MaterialController {
     public List<MaterialCategory> getMaterialCategoryList(){
 
         return materialService.getMaterialCategoryList();
+    }
+
+    @GetMapping("/available-list")
+    public List<Material> getAvailableMaterial(){
+
+        return materialService.getAvailableMaterial();
+    }
+
+    @GetMapping("/supplier-not-provide/{supId}")
+    public List<Material> getSupplierNotProvideMaterials(@PathVariable ("supId") Integer supplierId){
+
+        return materialService.getSupplierNotProvideMaterials(supplierId);
     }
 
     @RequestMapping("/ui")

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -51,5 +52,10 @@ public class Supplier {
 
     @Column(name = "updated_user")
     private Integer updatedUser;
+
+    @ManyToMany
+    @JoinTable(name = "material_has_supplier", joinColumns = @JoinColumn(name = "supplier_id"),
+            inverseJoinColumns = @JoinColumn(name = "material_id"))
+    private Set<Material> materials;
 
 }

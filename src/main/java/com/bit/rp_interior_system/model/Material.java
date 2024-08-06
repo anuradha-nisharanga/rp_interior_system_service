@@ -1,5 +1,6 @@
 package com.bit.rp_interior_system.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "material")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Material {
 
     @Id
@@ -75,4 +77,10 @@ public class Material {
 
     @Column(name = "deleted_user")
     private Integer deletedUser;
+
+    public Material(Integer id, String code, String name){
+        this.id = id;
+        this.code = code;
+        this.name = name;
+    }
 }

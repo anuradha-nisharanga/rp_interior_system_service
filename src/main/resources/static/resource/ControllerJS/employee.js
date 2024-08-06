@@ -79,8 +79,6 @@ const refillEmployeeForm =(rowOb,rowInd)=>{
 
     //set valid color for element
 
-
-
     console.log(userPrivilege);
 
     buttonEmployeeAdd.disabled = "true";

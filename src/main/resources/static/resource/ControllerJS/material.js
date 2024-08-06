@@ -26,9 +26,7 @@ const refreshMaterialTable = () =>{
     //disable delete button
     materials.forEach((element, index) => {
         if(element.status === false){
-            if (userPrivilege.delete) {
-                materialTable.children[1].children[index].children[8].children[1].disabled = "true"; //you can also use disabled
-            }
+            materialTable.children[1].children[index].children[8].children[1].disabled = true; //you can also use "disabled"
         }
     });
 
@@ -37,6 +35,8 @@ const refreshMaterialTable = () =>{
         // "scrollX": 500, // Enable horizontal scrollbar
         "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
     });
+
+
 }
 
 
