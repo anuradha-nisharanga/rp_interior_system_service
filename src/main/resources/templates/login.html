@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head th:replace = "~{common/header :: headerModuleFragment}">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login page</title>
+</head>
+<body>
+    <div class="container-md col-3 mt-5">
+        <div class="card">
+            <div class="card-title login-card mt-0">
+                <h2 style="text-align: center"> RP Interiors System</h2>
+                <h2 style="text-align: center">Login</h2>
+            </div>
+            <div class="card-body">
+                <form action="/login" method="post">
+                    <div class="mb-3">
+                        <label for="textUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="textUsername"
+                               aria-describedby="emailHelp" name="username" required>
+<!--                        <div class="invalid-feedback">-->
+<!--                            Invalid Username-->
+<!--                        </div>-->
+<!--                        <div class="valid-feedback">-->
+<!--                        </div>-->
+<!--                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+                    </div>
+                    <div class="mb-3">
+                        <label for="textPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="textPassword" name="password">
+<!--                        <div class="invalid-feedback">-->
+<!--                            Invalid Password-->
+<!--                        </div>-->
+<!--                        <div class="valid-feedback">-->
+<!--                        </div>-->
+                    </div>
+<!--                    <div class="mb-3 form-check">-->
+<!--                        <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
+<!--                        <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
+<!--                    </div>-->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+
+        function validateFields() {
+            var usernameField = document.getElementById('textUsername');
+            var passwordField = document.getElementById('textPassword');
+            var username = usernameField.value;
+            var password = passwordField.value;
+
+            if (username !== 'Admin') {
+                usernameField.classList.add('is-invalid');
+                usernameField.classList.remove('is-valid');
+            } else {
+                usernameField.classList.remove('is-invalid');
+                usernameField.classList.add('is-valid');
+            }
+
+            if (password !== '1234') {
+                passwordField.classList.add('is-invalid');
+                passwordField.classList.remove('is-valid');
+            } else {
+                passwordField.classList.remove('is-invalid');
+                passwordField.classList.add('is-valid');
+            }
+        }
+
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+
+                        if (!form.checkValidity() || !validateFields()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html>

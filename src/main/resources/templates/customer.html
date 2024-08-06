@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace = "~{common/header :: headerModuleFragment}">
+
+    //define in controller module
+    <title th:replace =" ~{ header :: headerModuleFragment}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:replace =" ~{ common/navbar :: navbarfragment }"></nav>
+    </div>
+    <div class="row">
+        <div class="left col-2">
+            <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
+        </div>
+        <div class="right col-10">
+            <div class="d-flex justify-content-md-end flex-wrap flex-md-nowrap align-items-center mt-4 pt-3 pb-2 mb-3 border-bottom">
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-right: 25px;">Print Customer Table</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCustomerAddForm" >Add Customer</button>
+            </div>
+            <div class="row mt-5">
+                <table class="table table-striped table-borderless" id="customerTable">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Nic</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="action-button">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="modalCustomerAddForm">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header fw-bold">Customer Details
+                            <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- form body -->
+                            <div class="card-body">
+                                <form onsubmit="return false" id="customerForm">
+                                    <div class="row">
+                                        <!-- form left area -->
+                                        <div class="col-6">
+
+                                            <!-- Customer name -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerName" class="form-label fw-bold">Full Name : <span class="text-danger"> * </span></label>
+                                                <input type="text" class="form-control" id="customerName" onkeyup="textFeildValidator(customerName ,'^(([A-Z][a-z]{3,20}[\\s])+([A-Z][a-z]{3,20}){1})$','customer','name')" placeholder="Enter your name" required>
+                                            </div>
+
+                                            <!-- nic -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerNic" class="form-label fw-bold">NIC : <span class="text-danger"> * </span></label>
+                                                <input type="text" class="form-control" id="customerNic" placeholder="Enter nic number" required  onkeyup="textFeildValidator(customerNic ,'^(([0-9]{9}[vVXxSs])|([0-9]{12}))$', 'customer', 'nic')"  data-bs-toggle="tooltip" name="nic" data-bs-placement="bottom" data-bs-title="This top tooltip is themed via CSS variables.">
+                                            </div>
+
+                                            <!-- mobile -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerMobile" class="form-label fw-bold">Mobile  : <span class="text-danger"> * </span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-mobile-screen"></i></span>
+                                                    <input type="text" class="form-control" id="customerMobile" aria-describedby="basic-addon1" onkeyup="textFeildValidator(customerMobile ,'^[0][7][012345678][0-9]{7}$','customer','mobile')" name="mobile" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- email -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerEmail" class="form-label fw-bold">Email  : <span class="text-danger"> * </span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon3"><i class="fa-regular fa-envelope"></i></span>
+                                                    <input type="email" class="form-control" id="customerEmail" aria-describedby="basic-addon3" onkeyup="textFeildValidator(customerEmail ,'^[A-Za-z0-9]{6,20}[@][a-z]{3,10}[.][a-z]{2,3}$','customer','email')" name="email" required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- form right area -->
+                                        <div class="col-6">
+
+                                            <!-- address -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerAddress" class="form-label fw-bold">Address : <span class="text-danger"> * </span></label>
+                                                <textarea class="form-control" id="customerAddress"  onkeyup ="textFeildValidator(this ,'^.*$','customer','address')" name="address" required placeholder="Enter your address"></textarea>
+                                            </div>
+
+                                            <!-- note -->
+                                            <div class="mb-3 col-10">
+                                                <label for="customerNote" class="form-label fw-bold">Note  : <span class="text-danger"> (Optional) </span></label>
+                                                <textarea class="form-control" placeholder="leave a note" id="customerNote" cols="30" name="note"></textarea>
+                                            </div>
+
+                                            <!--User Account active -->
+                                            <div class="form-check form-check-inline">
+                                                <input type ="checkbox" class="form-check-input" id="customerStatus" onchange="checkBoxValidator(this,'','customer','status',true,false,chkLblCustomerStatus, 'Customer Account is Active', 'Customer Account is Deactivated')" checked>
+                                                <label for="customerStatus" id="chkLblCustomerStatus" class="form-check-label fw-bold" >Customer Account is Active</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- form buttons -->
+                                    <div class="row mt-2">
+                                        <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                                            <button type="reset" class="btn btn-secondary fw-bold me-md-1">Reset</button>
+                                            <button type="submit" class="btn btn-primary fw-bold" id="customerAddButton" onclick="buttonCustomerAdd()">Submit</button>
+                                            <button type="submit" class="btn btn-success fw-bold" id="customerUpdateButton" onclick="buttonCustomerUpdate()">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--link jquery -->
+<script src="/resource/Common%20JS/jquery.js"></script>
+
+<!--link datatable js file -->
+<script src="/resource/DataTables-1.13.8/js/jquery.dataTables.js"></script>
+<script src ="/resource/ControllerJS/customer.js"></script>
+<script src="/resource/Common%20JS/sidebar.js"></script>
+</body>
+</html>

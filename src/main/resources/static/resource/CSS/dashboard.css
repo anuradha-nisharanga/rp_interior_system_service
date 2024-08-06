@@ -1,0 +1,53 @@
+
+/*body {*/
+/*    overflow-x: hidden;*/
+/*}*/
+
+/*!* topnavbar styles start *!*/
+/*.navbar {*/
+/*    background-color: yellow; !* Dark gray *!*/
+/*    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*}*/
+
+/*.header_img {*/
+/*    width: 35px;*/
+/*    height: 35px;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    border-radius: 50%;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.header_img img {*/
+/*    width: 40px;*/
+/*}*/
+
+
+
+/*@media (min-width: 767.98px) {*/
+/*    .navbar {*/
+/*        top: 0;*/
+/*        position: sticky;*/
+/*        z-index: 99;*/
+/*    }*/
+/*}*/
+
+
+/*!* topnavbar styles end*!*/
+
+/*background-color: #EAF3F3*/
+/*.card-set{*/
+/*    display: grid;*/
+/*}*/
+.right{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.dashboard-main{
+    background-color: #EAF3F3;
+}
