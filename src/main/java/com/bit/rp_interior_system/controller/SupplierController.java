@@ -20,23 +20,33 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping("/view")
-    public List<Supplier> getSupplierList(){
-        return supplierService.getSupplierList();
+    public List<Supplier> getAllSuppliers(){
+
+        return supplierService.getAllSuppliers();
     }
 
     @PostMapping("/create")
     public String createSupplier(@RequestBody SupplierDto supplierDto){
+
         return supplierService.createSupplier(supplierDto);
     }
 
     @PutMapping("/update")
     public String updateSupplier(@RequestBody SupplierDto supplierDto){
+
         return supplierService.updateSupplier(supplierDto);
     }
 
     @DeleteMapping("/delete")
     public String deleteSupplier(@RequestBody SupplierDto supplierDto){
+
         return supplierService.deleteSupplier(supplierDto);
+    }
+
+    @GetMapping("/list")
+    public List<Supplier> getSupplierList(){
+
+        return supplierService.getSupplierList();
     }
 
     @RequestMapping("/ui")

@@ -47,10 +47,10 @@ const refillSupplierForm =(rowOb,rowInd)=>{
     console.log(supplier);
 
     // get the supplier not providing materials list
-    supllierNotProvidedItemList = ajaxGetRequest("/material/supplier-not-provide/" + supplier.id);
+    materialList = ajaxGetRequest("/material/supplier-not-provide/" + supplier.id);
 
     // select data into not selected side which supplier not providing materials
-    fillMultipleSelectComponent(selectAllItems, '', supllierNotProvidedItemList, 'name', 'code');
+    fillMultipleSelectComponent(selectAllItems, '', materialList, 'name', 'code');
 
     // select data into selected side
     fillMultipleSelectComponent(selectedAllItems, '', supplier.materials, 'name', 'code');

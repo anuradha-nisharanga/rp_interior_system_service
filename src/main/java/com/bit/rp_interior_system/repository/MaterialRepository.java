@@ -14,7 +14,7 @@ public interface MaterialRepository  extends JpaRepository<Material, Integer>{
     @Query(value = "SELECT concat('M', lpad(substring(max(m.code),2)+ 1 , 5 ,'0')) FROM rp_interiors_db.material as m;", nativeQuery = true)
     String nextMaterialCodeNo();
 
-    @Query(value = "SELECT NEW Material (m.id, m.code, m.name) from Material m where m.status = true")
+    @Query(value = "SELECT NEW Material (m.id, m.code, m.name, m.unitPrice) from Material m where m.status = true")
     List<Material> getAvailableMaterialList();
 
     @Query(value = "SELECT NEW Material (m.id, m.code, m.name) from Material m where m.status = true and  " +

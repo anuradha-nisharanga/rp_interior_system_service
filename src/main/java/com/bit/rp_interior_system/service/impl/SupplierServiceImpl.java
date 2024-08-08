@@ -1,6 +1,5 @@
 package com.bit.rp_interior_system.service.impl;
 
-import com.bit.rp_interior_system.model.Material;
 import com.bit.rp_interior_system.model.Supplier;
 import com.bit.rp_interior_system.model.User;
 import com.bit.rp_interior_system.model.dto.SupplierDto;
@@ -15,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +28,7 @@ public class SupplierServiceImpl implements SupplierService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Supplier> getSupplierList() {
+    public List<Supplier> getAllSuppliers() {
 
         //login user authentication and authorization
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -133,5 +131,11 @@ public class SupplierServiceImpl implements SupplierService {
         catch (Exception e){
             return "Delete not completed : " + e.getMessage();
         }
+    }
+
+    @Override
+    public List<Supplier> getSupplierList() {
+
+        return supplierRepository.list();
     }
 }
