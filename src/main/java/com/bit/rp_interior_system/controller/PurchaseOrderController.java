@@ -6,10 +6,7 @@ import com.bit.rp_interior_system.service.PurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -27,6 +24,14 @@ public class PurchaseOrderController {
 
         return purchaseOrderService.getPurchaseOrders();
     }
+
+    @PostMapping("/create")
+    public String createPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
+
+        return purchaseOrderService.createPurchaseOrder(purchaseOrder);
+    }
+
+
 
     @GetMapping("/status")
     public List<PurchaseOrderStatus> getPurchaseOrderStatusList(){

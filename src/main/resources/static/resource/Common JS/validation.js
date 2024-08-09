@@ -57,7 +57,7 @@ const selectFeildValidator = (feildId,pattern, object, property)=>{
 
 //create select feild validation function
 
-const selectDFeildValidator = (feildId,pattern, object, property)=>{
+const selectDFeildValidator = (feildId, pattern, object, property)=>{
 
     const feildValue = feildId.value;
     
@@ -66,15 +66,15 @@ const selectDFeildValidator = (feildId,pattern, object, property)=>{
       feildId.style.border = '2px solid green';
       window[object][property] = JSON.parse(feildValue);// convert JS Object
 
- }else{
+    }else{
         
         window[object][property] = null;
         if (feildId.requied) {
-            feildId.style.border = '2px solid red';     
+            feildId.style.border = '2px solid red';
         } else {
-            feildId.style.border = '2px solid #ced4da'; 
+            feildId.style.border = '2px solid #ced4da';
         }
-       
+
     }
 }
 
