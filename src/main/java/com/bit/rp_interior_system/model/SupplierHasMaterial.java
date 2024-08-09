@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "material_has_supplier")
+@Table(name = "supplier_has_material")
 public class SupplierHasMaterial {
 
     @Id

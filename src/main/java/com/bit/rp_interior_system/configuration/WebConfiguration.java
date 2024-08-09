@@ -23,13 +23,14 @@ public class WebConfiguration {
                             .requestMatchers("/error").permitAll()
                             .requestMatchers("/index").permitAll()
                             .requestMatchers("/dashboard").hasAnyAuthority("Admin","Manager")
-                            .requestMatchers("/index").hasAnyAuthority("Admin","Manager","Production Manager","Store Manager","Finance Manager")
+                            .requestMatchers("/index").hasAnyAuthority("Admin","Manager","Production-Manager","Store-Manager","Finance-Manager")
                             .requestMatchers("/employee/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/user/**").hasAnyAuthority("Admin")
-                            .requestMatchers("/privilege/**").hasAnyAuthority("Admin","Manager","Production Manager")
-                            .requestMatchers("/material/**").hasAnyAuthority("Admin","Manager","StoreKeeper")
+                            .requestMatchers("/privilege/**").hasAnyAuthority("Admin","Manager","Production-Manager")
+                            .requestMatchers("/material/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/customer/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/supplier/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/purchase-order/**").hasAnyAuthority("Admin","Manager","Store-Manager")
                             .anyRequest().authenticated();
 
                 })

@@ -54,8 +54,13 @@ public class Supplier {
     private Integer updatedUser;
 
     @ManyToMany
-    @JoinTable(name = "material_has_supplier", joinColumns = @JoinColumn(name = "supplier_id"),
+    @JoinTable(name = "supplier_has_material", joinColumns = @JoinColumn(name = "supplier_id"),
             inverseJoinColumns = @JoinColumn(name = "material_id"))
     private Set<Material> materials;
+
+    public Supplier(Integer id,String name){
+        this.id = id;
+        this.name = name;
+    }
 
 }
