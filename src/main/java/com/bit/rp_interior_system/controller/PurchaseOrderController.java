@@ -2,6 +2,7 @@ package com.bit.rp_interior_system.controller;
 
 import com.bit.rp_interior_system.model.PurchaseOrder;
 import com.bit.rp_interior_system.model.PurchaseOrderStatus;
+import com.bit.rp_interior_system.model.dto.MaterialDto;
 import com.bit.rp_interior_system.service.PurchaseOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,17 @@ public class PurchaseOrderController {
         return purchaseOrderService.createPurchaseOrder(purchaseOrder);
     }
 
+    @PutMapping("/update")
+    public String updatePurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
+        return purchaseOrderService.updatePurchaseOrder(purchaseOrder);
+    }
+
+    @DeleteMapping("/delete")
+    public String deletePurchaseOrder(@RequestBody PurchaseOrder PurchaseOrder){
+
+        return purchaseOrderService.deletePurchaseOrder(PurchaseOrder);
+    }
 
     @GetMapping("/status")
     public List<PurchaseOrderStatus> getPurchaseOrderStatusList(){

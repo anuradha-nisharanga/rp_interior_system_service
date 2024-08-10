@@ -56,6 +56,12 @@ public class MaterialController {
         return materialService.getAvailableMaterial();
     }
 
+    @GetMapping("/supplier-provide/{supId}")
+    public List<Material> getSupplierProvideMaterials(@PathVariable ("supId") Integer supplierId){
+
+        return materialService.getSupplierProvideMaterials(supplierId);
+    }
+
     @GetMapping("/supplier-not-provide/{supId}")
     public List<Material> getSupplierNotProvideMaterials(@PathVariable ("supId") Integer supplierId){
 

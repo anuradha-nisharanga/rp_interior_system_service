@@ -121,6 +121,7 @@ const getDesignation = (rowOb) =>{
 }
 
 const reFreshEmployeeForm = () => {
+
     employee = {};
     designations = ajaxGetRequest("/designation/")
     statusList = ajaxGetRequest("/status/")

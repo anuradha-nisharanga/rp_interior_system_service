@@ -78,6 +78,12 @@ public class Material {
     @Column(name = "deleted_user")
     private Integer deletedUser;
 
+    public Material(Integer id, String code, String name){
+        this.id = id;
+        this.code = code;
+        this.name = name;
+    }
+
     public Material(Integer id, String code, String name, BigDecimal unitPrice){
         this.id = id;
         this.code = code;
