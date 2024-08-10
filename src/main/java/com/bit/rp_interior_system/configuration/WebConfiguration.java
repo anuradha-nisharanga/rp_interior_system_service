@@ -26,11 +26,12 @@ public class WebConfiguration {
                             .requestMatchers("/index").hasAnyAuthority("Admin","Manager","Production-Manager","Store-Manager","Finance-Manager")
                             .requestMatchers("/employee/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/user/**").hasAnyAuthority("Admin")
-                            .requestMatchers("/privilege/**").hasAnyAuthority("Admin","Manager","Production-Manager")
+                            .requestMatchers("/privilege/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/material/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/customer/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/supplier/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/purchase-order/**").hasAnyAuthority("Admin","Manager","Store-Manager")
+                            .requestMatchers("/grn/**").hasAnyAuthority("Admin","Manager","Store-Manager")
                             .anyRequest().authenticated();
 
                 })

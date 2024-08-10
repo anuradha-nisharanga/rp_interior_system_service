@@ -11,4 +11,8 @@ public interface PurchaseOrderService {
     List<PurchaseOrderStatus> getPurchaseOrderStatusList();
 
     String createPurchaseOrder(PurchaseOrder purchaseOrder);
+
+    String updatePurchaseOrder(PurchaseOrder purchaseOrder);
+
+    String deletePurchaseOrder(PurchaseOrder purchaseOrder);
 }

@@ -18,7 +18,7 @@ import java.util.List;
 public class PurchaseOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -60,7 +60,10 @@ public class PurchaseOrder {
     @JoinColumn(name = "purchase_order_status_id", referencedColumnName = "id")
     private PurchaseOrderStatus purchaseOrderStatus;
 
-    //set the class attribute purchaseOrder instead purchase_order_id
-    @OneToMany(mappedBy = "purchaseOrder")
+    /*set the class attribute purchaseOrder instead purchase_order_id
+    * cascade type all add for map to the association table when inserting updating
+    * OrphanRemoval use for delete the association table data when updating inner form data like removing materials*/
+
+    @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseOrderHasMaterial> materialList;
 }

@@ -3,35 +3,35 @@ window.addEventListener('load',()=>{
     userPrivilege = ajaxGetRequest("/privilege/by-logged-user-module/purchase-order");
     console.log(userPrivilege);
 
-    // refreshEmployeeTable();
+    refreshPOderTable();
     reFreshPurchaseOrderForm();
 })
 
 // get data into table
-const refreshEmployeeTable = () =>{
+const refreshPOderTable = () =>{
 
-    employees = ajaxGetRequest("/employee/find");
+    purchaseOrders = ajaxGetRequest("/purchase-order/view");
 
         const displayProperty = [
-        {property:'employeeNo', datatype:'string'},
-        {property:'fullName', datatype:'string'},
-        {property:'mobile', datatype:'string'},
-        {property:'address', datatype:'string'},
-        {property: getDesignation, datatype:'function'},
+        {property:'purchaseOrderCode', datatype:'string'},
+        {property:getSupplierName, datatype:'function'},
+        {property:getMaterialList, datatype:'function'},
+        {property:'requiredDate', datatype:'string'},
+        {property:getTotalAmount, datatype:'function'},
         {property:getStatus, datatype:'function'}]
 
-    fillDataIntoTable(employeeTable, employees ,displayProperty ,refillEmployeeForm, deleteEmployees, printEmployee, true, userPrivilege);
+    fillDataIntoTable(pOrderTable, purchaseOrders ,displayProperty ,refillPOrderForm, deletePOrder, printPOrder, true, userPrivilege);
 
     //disable delete button
-    employees.forEach((element, index) => {
-        if(element.status.name === "Deleted"){
+    purchaseOrders.forEach((element, index) => {
+        if(element.purchaseOrderStatus.name === "Deleted"){
             if (userPrivilege.delete) {
-                employeeTable.children[1].children[index].children[7].children[1].disabled = "true"; //you can also use disabled
+                pOrderTable.children[1].children[index].children[7].children[1].disabled = true; //you can also use disabled
             }
         }
     });
 
-    $('#employeeTable').dataTable({
+    $('#pOrderTable').dataTable({
         "responsive": true,
         // "scrollX": 500, // Enable horizontal scrollbar
         "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
@@ -39,85 +39,77 @@ const refreshEmployeeTable = () =>{
 }
 
 //create refill function
-const refillEmployeeForm =(rowOb,rowInd)=>{
+const refillPOrderForm =(rowOb,rowInd)=>{
     $('#modalPOrderAddForm').modal('show');
 
-    employee = JSON.parse(JSON.stringify(rowOb));
-    oldemployee = JSON.parse(JSON.stringify(rowOb));
+    purchaseOrder = JSON.parse(JSON.stringify(rowOb));
+    oldPurchaseOrder = JSON.parse(JSON.stringify(rowOb));
 
-    console.log(employee);
-    console.log(oldemployee);
+    console.log(purchaseOrder);
+    console.log(oldPurchaseOrder);
 
-    employeeFullName.value = employee.fullName;
-    employeeCallingName.value = employee.callingName;
-    employeeNic.value = employee.nic;
-    employeeDob.value = employee.dateOfBirth;
-    employeeMobile.value = employee.mobile;
-    employeeEmail.value = employee.email;
-    employeeAddress.value = employee.address;
-    employeeStatus.value = employee.status;
-    employeeDesignation.value = employee.designation;
+    pRequiredDate.value = purchaseOrder.requiredDate;
+    pTotalAmount.value = purchaseOrder.totalAmount;
 
-
-    if(employee.landno != null)
-        employeeLand.value = employee.landno;else employeeLand.value = "";
-
-    if(employee.note != null)
-        employeeNote.value = employee.note; else employeeNote.value = "";
-
-    if(employee.gender == "Male"){
-        employeeGenderMale.checked = true;
-    }else{
-        employeeGenderFemale.checked = true;
-    }
+    if(purchaseOrder.note != null)
+        pNote.value = purchaseOrder.note; else pNote.value = "";
 
     // selectDesignation
-    fillDataIntoSelect( employeeDesignation, 'Select Designation', designations,'designationName', employee.designation.name);
+    fillDataIntoSelect( pSupplierList, 'Select Supplier *', supplierList,'name', purchaseOrder.supplier.name);
+    pSupplierList.disabled = true;
 
     // selectEmployeeStatus
-    fillDataIntoSelect( employeeStatus, 'Select Status', statusList, 'statusName', employee.status.name);
+    fillDataIntoSelect( purchaseOrderStatus, 'Select Status *', purchaseOrderStatusList, 'name', purchaseOrder.purchaseOrderStatus.name);
+
+    // fill supplier provide materials only
+    availableMaterialList = ajaxGetRequest("/material/supplier-provide/" + JSON.parse(pSupplierList.value).id )
+    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name');
 
     //set valid color for element
-
     console.log(userPrivilege);
 
-    buttonEmployeeAdd.disabled = "true";
-    $("#buttonEmployeeAdd").css("cursor","not-allowed");
+    pAddButton.disabled = "true";
+    $("#pAddButton").css("cursor","not-allowed");
 
     if(userPrivilege.update) {
-        buttonEmployeeUpdate.disabled = "";
-        $("#buttonEmployeeUpdate").css("cursor","pointer");
+        pUpdateButton.disabled = false;
+        $("#pUpdateButton").css("cursor","pointer");
     }else{
-        buttonEmployeeUpdate.disabled = "true";
-        $("#buttonEmployeeUpdate").css("cursor","not-allowed");
+        pUpdateButton.disabled = true;
+        $("#pUpdateButton").css("cursor","not-allowed");
     }
+
+    refreshInnerPOrderFormAndTable();
+    updateTotalAmount();
 }
 
-const printEmployee = (rowOb, rowInd) => {
-    console.log("print employee");
+const printPOrder = (rowOb, rowInd) => {
+    console.log("print POrder");
 }
 
+const getSupplierName = (rowOb) =>{
+    return rowOb.supplier.name;
+}
+const getMaterialList = () => {
+    return "Item List"
+}
 const getStatus = (rowOb) =>{
     console.log('status')
-    if (rowOb.status.name === 'Resign') {
-        return '<p class= "btn btn-outline-success">' + rowOb.status.name +'</p>';
+    if (rowOb.purchaseOrderStatus.name === 'Requested') {
+        return '<p class= "btn btn-outline-info">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
-    if (rowOb.status.name === 'Working') {
-        return '<p class = "btn btn-outline-dark">' + rowOb.status.name +'</p>';
+    if (rowOb.purchaseOrderStatus.name === 'Received') {
+        return '<p class = "btn btn-outline-success">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
-    if (rowOb.status.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.status.name + '</p>';
+    if (rowOb.purchaseOrderStatus.name === 'Cancel') {
+        return '<p class= "btn btn-outline-warning">' + rowOb.purchaseOrderStatus.name + '</p>';
+    }
+    if (rowOb.purchaseOrderStatus.name === 'Deleted') {
+        return '<p class= "btn btn-outline-danger">' + rowOb.purchaseOrderStatus.name + '</p>';
     }
 }
-
-const getDesignation = (rowOb) =>{
-    console.log('status')
-    if (rowOb.designation.name === 'Admin') {
-        return '<p class= "btn btn-outline-success">' + rowOb.designation.name +'</p>';
-    }
-    if (rowOb.designation.name === 'Manager') {
-        return '<p class = "btn btn-outline-dark">' + rowOb.designation.name +'</p>';
-    }
+const getTotalAmount = (rowOb) => {
+    return parseFloat(rowOb.totalAmount).toFixed(2)
 }
 
 const reFreshPurchaseOrderForm = () => {
@@ -132,8 +124,10 @@ const reFreshPurchaseOrderForm = () => {
     purchaseOrderStatusList = ajaxGetRequest("/purchase-order/status");
 
     fillDataIntoSelect( pSupplierList, 'Select Supplier *', supplierList, 'name');
+    pSupplierList.disabled = false;
 
     fillDataIntoSelect(purchaseOrderStatus, 'Select Status *', purchaseOrderStatusList, 'name', 'Requested');
+
 
     // Bind selected status to purchase order
     purchaseOrder.purchaseOrderStatus = JSON.parse(purchaseOrderStatus.value);
@@ -150,7 +144,7 @@ const reFreshPurchaseOrderForm = () => {
     pNote.value = '';
     pNote.style.border ='1px solid #ced4da';
 
-    pUpdateButton.disabled = "true";
+    pUpdateButton.disabled = true;
     $("#pUpdateButton").css("cursor","not-allowed");
 
     if(userPrivilege.insert) {
@@ -173,8 +167,8 @@ const refreshInnerPOrderFormAndTable = () =>{
     pOrderMaterial = {};
     oldPOrderMaterial = null;
 
-    availableMaterialList = ajaxGetRequest("/material/available-list")
-    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name');
+    // availableMaterialList = ajaxGetRequest("/material/available-list")
+    // fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name');
 
     //set values to empty and set input field default colors
     purchaseOrderMaterial.value = '';
@@ -206,12 +200,39 @@ const getMaterialName = (ob) =>{
 const getUnitPrice = (ob) =>{
     return parseFloat(ob.unitPrice).toFixed(2);
 }
+
 const getLinePrice = (ob) =>{
     return parseFloat(ob.linePrice).toFixed(2);
 }
 
 const innerTableRefill = (rowOb, index) => {
+    innerRowInd = index;
 
+    // get the supplier provide material list
+    availableMaterialList = ajaxGetRequest("/material/supplier-provide/" + JSON.parse(pSupplierList.value).id )
+    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name', rowOb.material.name);
+
+    pOrderUnitPrice.value = parseFloat(rowOb.unitPrice).toFixed(2);
+
+    pOrderQuantity.value = rowOb.orderQty
+
+    pOrderLineCost.value = parseFloat(rowOb.linePrice).toFixed(2);
+}
+
+const buttonInnerPurchaseUpdate = () => {
+
+    if (pOrderQuantity.value != purchaseOrder.materialList[innerRowInd].orderQty){
+        let userConfirmToUpdateInnerForm = confirm("are you sure to update the quantity?");
+        if (userConfirmToUpdateInnerForm){
+            purchaseOrder.materialList[innerRowInd].orderQty = pOrderQuantity.value;
+            purchaseOrder.materialList[innerRowInd].linePrice = pOrderLineCost.value;
+            refreshInnerPOrderFormAndTable();
+            updateTotalAmount();
+        }
+    }
+    else {
+        alert("Noting to Update! ")
+    }
 }
 
 const innerTableDelete = (rowOb, index) => {
@@ -259,9 +280,9 @@ const buttonInnerPurchaseAdd = () => {
 
         let userConfirm = confirm("Are you Sure to add materials \n"
             + "Material name : " + pOrderMaterial.material.name + "\n"
-            + "Material qty : " + pOrderMaterial.orderQty + "\n"
-            + "Material qty : " + pOrderMaterial.unitPrice + "\n"
-            + "Material qty : " + pOrderMaterial.linePrice + "\n");
+            + "Material qty : "  + pOrderMaterial.orderQty + "\n"
+            + "Material qty : "  + pOrderMaterial.unitPrice + "\n"
+            + "Material qty : "  + pOrderMaterial.linePrice + "\n");
 
         if (userConfirm){
             alert("Order Item Added Successfully!")
@@ -275,6 +296,7 @@ const buttonInnerPurchaseAdd = () => {
         alert("Form has some errors \n"+ errors)
     }
 }
+
 
 const generateUnitPrice = () => {
 
@@ -314,9 +336,9 @@ const generateLinePrice = () => {
 const generateDecimalPoint = () =>{
     let uniPrice = pOrderUnitPrice.value;
     if(new RegExp("^[1-9][0-9]{0,7}[.][0-9]{2}$").test(uniPrice)){
-        pOrderUnitPrice.value = parseFloat(pOrderUnitPrice.value).toFixed(2)
+        pOrderUnitPrice.value = parseFloat(pOrderUnitPrice.value).toFixed(2);
         pOrderMaterial.unitPrice = pOrderUnitPrice.value;
-        pOrderLineCost.style.border = '2px solid green'
+        pOrderLineCost.style.border = '2px solid green';
     }
 }
 
@@ -342,6 +364,11 @@ const updateTotalAmount =() =>{
 
         purchaseOrder.totalAmount = pTotalAmount.value;
     }
+}
+
+const filterMaterial  = () =>{
+    materialsBySupplier = ajaxGetRequest("/material/supplier-provide/" + JSON.parse(pSupplierList.value).id )
+    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', materialsBySupplier, 'name','');
 }
 
 const generateDateRange =() =>{
@@ -377,7 +404,6 @@ const generateDateRange =() =>{
     pRequiredDate.max = maxDate.getFullYear()+ '-' + maxMonth+ '-' + maxDay;
 }
 
-const buttonInnerPurchaseUpdate = () => {}
 
 // create function for check form Error
 const checkError = () => {
@@ -427,7 +453,8 @@ const buttonPOrderAdd = () =>{
             if (serverResponse == 'OK') {
                 alert('Save Successfully......!' );
                 //need to refresh table and form
-                // refreshEmployeeTable();
+                refreshPOderTable();
+                pOrderMaterialForm.reset();
                 reFreshPurchaseOrderForm();
                 //need to hide modal
                 $('#modalPOrderAddForm').modal('hide');
@@ -436,8 +463,6 @@ const buttonPOrderAdd = () =>{
                 alert('Save Not Successful....! Have Some Errors \n' + serverResponse);
             }
         }
-
-
     } else {
         alert('form has some errors \n' + formErrors)
     }
@@ -447,36 +472,37 @@ const buttonPOrderAdd = () =>{
 const checkUpdate = ()=>{
     let updates = "";
 
-    if (employee.fullName != oldemployee.fullName){
-        updates = updates + "full name is change " + oldemployee.fullName + "into" + employee.fullName + "\n";
+    if (purchaseOrder.requiredDate != oldPurchaseOrder.requiredDate){
+        updates = updates + "Required date is change " + oldPurchaseOrder.requiredDate + "into" + purchaseOrder.requiredDate + "\n";
     }
 
-    if (employee.callingName != oldemployee.callingName){
-        updates = updates + "calling name is change " + oldemployee.callingName + "into" + employee.callingName + "\n";
+    if(purchaseOrder.totalAmount != oldPurchaseOrder.totalAmount){
+        updates = updates + "Total Amount is change " + oldPurchaseOrder.totalAmount + "into" + purchaseOrder.totalAmount + "\n";
     }
 
-    if(employee.mobile != oldemployee.mobile){
-        updates = updates + "mobile is change " + oldemployee.mobile + "into" + employee.mobile + "\n";
+    if(purchaseOrder.purchaseOrderStatus != oldPurchaseOrder.purchaseOrderStatus){
+        updates = updates + "Status is change " + purchaseOrder.purchaseOrderStatus + "into" + oldPurchaseOrder.purchaseOrderStatus + "\n";
     }
 
-    if(employee.nic != oldemployee.nic){
-        updates = updates + "nic is change " + oldemployee.nic + "into" + employee.nic + "\n";
+    if(purchaseOrder.note != oldPurchaseOrder.note){
+        updates = updates + "Note is change \n";
     }
 
-    if(employee.address != oldemployee.address){
-        updates = updates + "address is change " + oldemployee.address + "into" + employee.address + "\n";
+    if (purchaseOrder.materialList.length != oldPurchaseOrder.materialList.length){
+        updates = updates + "Order Materials are change \n";
     }
-
-    if(employee.email != oldemployee.email){
-        updates = updates + "address is change " + oldemployee.mobile + "into" + employee.mobile + "\n";
-    }
-
-    if(employee.designation.name != oldemployee.designation.name){
-        updates = updates + "designation is change \n";
-    }
-
-    if(employee.status.name != oldemployee.status.name){
-        updates = updates + "status is change \n";
+    else{
+        let extMCount = 0;
+        for(const newOrderMaterial of purchaseOrder.materialList ){
+            for (const oldOrderMaterial of oldPurchaseOrder.materialList){
+                if(newOrderMaterial.material.id == oldOrderMaterial.material.id ){
+                    extMCount = extMCount+1;
+                }
+            }
+        }
+        if (extMCount != purchaseOrder.materialList.length){
+            updates = updates + "Order Materials are change \n";
+        }
     }
 
     return updates;
@@ -494,13 +520,13 @@ const buttonPOrderUpdate = () =>{
             //cell put service
             let userConfirm = confirm("Are you sure following changer...? \n" + updates);
             if(userConfirm){
-                let updateServicesResponses = ajaxRequestBody("/employee/update","PUT", employee);
+                let updateServicesResponses = ajaxRequestBody("/purchase-order/update","PUT", purchaseOrder);
                 if (updateServicesResponses == "OK") {
                     alert('Update Successfully......!' );
                     //need to refresh table and form
-                    refreshEmployeeTable();
-                    employeeForm.reset();
-                    reFreshEmployeeForm();
+                    refreshPOderTable();
+                    pOrderMaterialForm.reset();
+                    reFreshPurchaseOrderForm();
                     //need to hide modal
                     $('#modalPOrderAddForm').modal('hide');
 
@@ -517,15 +543,15 @@ const buttonPOrderUpdate = () =>{
     }
 }
 
-const deleteEmployees =(rowOb, rowInd) =>{
-    const userConfirm = confirm('Do you want to delete this Employee \n' + rowOb.fullName);
+const deletePOrder =(rowOb, rowInd) =>{
+    const userConfirm = confirm('Do you want to delete this Purchase Order \n' + rowOb.purchaseOrderCode);
 
     if (userConfirm) {
-        let serverResponse = ajaxRequestBody("/employee/delete", "DELETE", rowOb);
+        let serverResponse = ajaxRequestBody("/purchase-order/delete", "DELETE", rowOb);
         if (serverResponse == "OK") {
             alert('Delete Successfully......!' );
             //need to refresh table and form
-            refreshEmployeeTable();
+            refreshPOderTable();
 
         } else {
             alert('Delete Not Successfully....! Have Some Errors \n' + serverResponse);

@@ -22,5 +22,7 @@ public interface MaterialService {
     List<Material> getAvailableMaterial();
 
     List<Material> getSupplierNotProvideMaterials(Integer supplierId);
+
+    List<Material> getSupplierProvideMaterials(Integer supplierId);
 }
 

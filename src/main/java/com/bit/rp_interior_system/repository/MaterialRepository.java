@@ -20,4 +20,8 @@ public interface MaterialRepository  extends JpaRepository<Material, Integer>{
     @Query(value = "SELECT NEW Material (m.id, m.code, m.name) from Material m where m.status = true and  " +
             " m.id NOT IN (SELECT shi.material.id from SupplierHasMaterial shi where shi.supplier.id = :supId) ")
     List<Material> getSupplierNotProvideMaterials(@Param("supId") Integer supplierId);
+
+    @Query(value = "SELECT NEW Material (m.id, m.code, m.name, m.unitPrice) from Material m where m.status = true and " +
+            " m.id IN (SELECT shi.material.id from SupplierHasMaterial shi where shi.supplier.id = :supId) ")
+    List<Material> getSupplierProvideMaterials(@Param("supId") Integer supplierId);
 }

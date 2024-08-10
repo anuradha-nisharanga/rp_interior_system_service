@@ -1,8 +1,6 @@
 package com.bit.rp_interior_system.service.impl;
 
-import com.bit.rp_interior_system.model.PurchaseOrder;
-import com.bit.rp_interior_system.model.PurchaseOrderStatus;
-import com.bit.rp_interior_system.model.User;
+import com.bit.rp_interior_system.model.*;
 import com.bit.rp_interior_system.repository.PurchaseOrderRepository;
 import com.bit.rp_interior_system.repository.PurchaseOrderStatusRepository;
 import com.bit.rp_interior_system.repository.UserRepository;
@@ -13,8 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,14 +56,91 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         }
 
         User logedUser = userRepository.getUserByUserName(auth.getName());
-        
+
 
         try {
+            purchaseOrder.setCreatedUser(logedUser.getId());
+            purchaseOrder.setCreatedAt(LocalDateTime.now());
+
+            //set next order code
+            String nextNumber = purchaseOrderRepository.getNextNumber();
+            if (nextNumber == null){
+                nextNumber = LocalDate.now().getYear() + "000001";
+            }
+
+            purchaseOrder.setPurchaseOrderCode(nextNumber);
+
+            for (PurchaseOrderHasMaterial pOrderMaterial : purchaseOrder.getMaterialList()){
+                pOrderMaterial.setPurchaseOrder(purchaseOrder);
+            }
+            purchaseOrderRepository.save(purchaseOrder);
 
             return "OK";
         }
         catch (Exception e){
             return "Save not Completed" + e.getMessage();
         }
+    }
+
+    @Override
+    public String updatePurchaseOrder(PurchaseOrder purchaseOrder) {
+        //login user authentication and authorization
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"purchase-order");
+        if(!logUserPrivilege.get("update")){
+            throw new RuntimeException("Update not completed: you have no privilege");
+        }
+
+        User logedUser = userRepository.getUserByUserName(auth.getName());
+
+        PurchaseOrder existPurchaseOrder = purchaseOrderRepository.getReferenceById(purchaseOrder.getId());
+        if (existPurchaseOrder == null){
+            return "Purchase Order Not exist...!";
+        }
+
+        try {
+            purchaseOrder.setUpdatedUser(logedUser.getId());
+            purchaseOrder.setUpdatedAt(LocalDateTime.now());
+
+            for (PurchaseOrderHasMaterial pOrderMaterial : purchaseOrder.getMaterialList()){
+                pOrderMaterial.setPurchaseOrder(purchaseOrder);
+            }
+            purchaseOrderRepository.save(purchaseOrder);
+
+            return "OK";
+        }
+        catch (Exception e){
+            return "Update not Completed" + e.getMessage();
+        }
+    }
+
+    @Override
+    public String deletePurchaseOrder(PurchaseOrder purchaseOrder) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        HashMap<String,Boolean> logUserPrivilege = privilegeService.getAllPrivilegeByUserModule(auth.getName(),"purchase-order");
+        if(!logUserPrivilege.get("delete")){
+            throw new RuntimeException("Delete not completed: you have no privilege");
+        }
+
+        Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrderRepository.findById(purchaseOrder.getId());
+        if (optionalPurchaseOrder.isEmpty()){
+            throw new RuntimeException("Purchase Order Not Found");
+        }
+
+        try{
+            PurchaseOrderStatus purchaseOrderStatus = new PurchaseOrderStatus();
+            purchaseOrderStatus.setId(4);
+            purchaseOrderStatus.setName("Deleted");
+
+            PurchaseOrder existOrder = optionalPurchaseOrder.get();
+            existOrder.setPurchaseOrderStatus(purchaseOrderStatus);
+            purchaseOrderRepository.save(existOrder);
+
+            return "OK";
+        }
+        catch (Exception e){
+            return "Delete not completed : " + e.getMessage();
+        }
+
     }
 }
