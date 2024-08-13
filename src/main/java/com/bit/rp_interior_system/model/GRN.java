@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,14 +27,23 @@ public class GRN {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "grn_code")
+    private String grnCode;
+
     @Column(name = "bill_no")
     private String billNo;
+
+    @Column(name = "grn_date")
+    private LocalDate grnDate;
 
     @Column(name = "discount_rate")
     private BigDecimal discountRate;
 
     @Column(name = "net_amount")
     private BigDecimal netAmount;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
     @Column(name = "paid_amount")
     private BigDecimal paidAmount;
@@ -65,6 +75,6 @@ public class GRN {
     private GrnStatus grnStatus;
 
     @OneToMany(mappedBy = "grn", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GRNHasMaterial> grnHasMaterialList;
+    private List<GRNHasMaterial> grnMaterialList;
 
 }

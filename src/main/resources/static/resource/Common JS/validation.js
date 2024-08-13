@@ -78,6 +78,23 @@ const selectDFeildValidator = (feildId, pattern, object, property)=>{
     }
 }
 
+const selectNormalValidator = (fieldId)=>{
+
+    const fieldValue = fieldId.value;
+
+    if(fieldValue !== ""){
+        //valid value
+        fieldId.style.border = '2px solid green';
+    }else{
+
+        if (fieldId.requied) {
+            fieldId.style.border = '2px solid red';
+        } else {
+            fieldId.style.border = '2px solid #ced4da';
+        }
+    }
+}
+
 //create function for date feild validator
 const dateFeildValidator = (feildId,pattern, object, property) =>{
     const feildValue = feildId.value;

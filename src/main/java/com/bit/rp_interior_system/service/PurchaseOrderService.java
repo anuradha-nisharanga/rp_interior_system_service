@@ -15,4 +15,6 @@ public interface PurchaseOrderService {
     String updatePurchaseOrder(PurchaseOrder purchaseOrder);
 
     String deletePurchaseOrder(PurchaseOrder purchaseOrder);
+
+    List<PurchaseOrder> getPurchaseOrdersBySupplier(Integer supplierId);
 }
