@@ -54,6 +54,12 @@ public class GRNController {
         return grnService.getGRNStatusList();
     }
 
+    @GetMapping("/list/{supId}")
+    public List<GRN> getGrnListBySupplier(@PathVariable ("supId") Integer supplierId){
+
+        return grnService.getGrnListBySupplier(supplierId);
+    }
+
     @RequestMapping("/ui")
     public ModelAndView viewUI(){
 

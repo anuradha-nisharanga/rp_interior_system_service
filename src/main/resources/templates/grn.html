@@ -35,7 +35,9 @@
                         <th scope="col">Supplier</th>
                         <th scope="col">Bill No</th>
                         <th scope="col">GRN Date</th>
-                        <th scope="col">Total Amount (Rs.)</th>
+                        <th scope="col">Total (Rs.)</th>
+                        <th scope="col">Paid (Rs.)</th>
+                        <th scope="col">Balance (Rs.)</th>
                         <th scope="col">Status</th>
                         <th scope="col" class="action-button">Action</th>
                     </tr>
@@ -65,7 +67,7 @@
                                             <!-- Select Supplier-->
                                             <div class="mb-3 col-10">
                                                 <label for="gSupplierList" class="form-label fw-bold">Supplier  : <span class="text-danger"> * </span></label>
-                                                <select class="form-select" id = "gSupplierList" aria-label="Default select" onchange="selectNormalValidator(gSupplierList) ; filterPurchaseOrderList()" name ="supplier" required>
+                                                <select class="form-select" id = "gSupplierList" aria-label="Default select" onchange="selectDFeildValidator(gSupplierList, '', 'grn', 'supplier') ; filterPurchaseOrderList()" name ="supplier" required>
                                                 </select>
                                             </div>
 

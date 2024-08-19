@@ -96,16 +96,16 @@ const getMaterialList = () => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.purchaseOrderStatus.name === 'Requested') {
-        return '<p class= "btn btn-outline-info">' + rowOb.purchaseOrderStatus.name +'</p>';
+        return '<p class= "btn btn-outline-info btn-sm mt-3">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Received') {
-        return '<p class = "btn btn-outline-success">' + rowOb.purchaseOrderStatus.name +'</p>';
+        return '<p class = "btn btn-outline-success btn-sm mt-3">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Cancel') {
-        return '<p class= "btn btn-outline-warning">' + rowOb.purchaseOrderStatus.name + '</p>';
+        return '<p class= "btn btn-outline-warning btn-sm mt-3">' + rowOb.purchaseOrderStatus.name + '</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.purchaseOrderStatus.name + '</p>';
+        return '<p class= "btn btn-outline-danger btn-sm mt-3">' + rowOb.purchaseOrderStatus.name + '</p>';
     }
 }
 const getTotalAmount = (rowOb) => {

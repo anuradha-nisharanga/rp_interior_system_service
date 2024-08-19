@@ -16,4 +16,6 @@ public interface SupplierService {
     String deleteSupplier(SupplierDto supplierDto);
 
     List<Supplier> getSupplierList();
+
+    List<Supplier> getGrnSupplierList();
 }

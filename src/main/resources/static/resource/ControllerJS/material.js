@@ -80,10 +80,10 @@ const printEmployee = (rowOb, rowInd) => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.status == true) {
-        return '<p class= "btn btn-outline-success">' + "Available" +'</p>';
+        return '<p class= "btn btn-outline-success btn-sm mt-3">' + "Available" +'</p>';
     }
     if (rowOb.status == false) {
-        return '<p class = "btn btn-outline-dark">' + "NA" +'</p>';
+        return '<p class = "btn btn-outline-dark btn-sm mt-3">' + "NA" +'</p>';
     }
 }
 

@@ -15,4 +15,6 @@ public interface GRNService {
     String updateGrn(GRN grn);
 
     String deleteDrn(GRN grn);
+
+    List<GRN> getGrnListBySupplier(Integer supplierId);
 }

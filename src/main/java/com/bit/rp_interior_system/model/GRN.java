@@ -21,9 +21,6 @@ public class GRN {
     @Column(name = "id", unique = true)
     private Integer id;
 
-    @Column(name = "grand_total")
-    private BigDecimal grandTotal;
-
     @Column(name = "note")
     private String note;
 
@@ -44,6 +41,9 @@ public class GRN {
 
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
+
+    @Column(name = "balance_amount")
+    private BigDecimal balanceAmount;
 
     @Column(name = "paid_amount")
     private BigDecimal paidAmount;
@@ -71,10 +71,21 @@ public class GRN {
     private PurchaseOrder purchaseOrder;
 
     @ManyToOne
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplier;
+
+    @ManyToOne
     @JoinColumn(name = "grn_status_id", referencedColumnName = "id")
     private GrnStatus grnStatus;
 
     @OneToMany(mappedBy = "grn", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GRNHasMaterial> grnMaterialList;
 
+    public GRN(Integer id, String grnCode, BigDecimal totalAmount, BigDecimal balanceAmount, BigDecimal paidAmount){
+        this.id = id;
+        this.grnCode = grnCode;
+        this.totalAmount = totalAmount;
+        this.balanceAmount = balanceAmount;
+        this.paidAmount = paidAmount;
+    }
 }

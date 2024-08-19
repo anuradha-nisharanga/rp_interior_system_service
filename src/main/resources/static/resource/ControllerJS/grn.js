@@ -13,12 +13,14 @@ const refreshGrnTable = () =>{
     GRNList = ajaxGetRequest("/grn/view");
 
         const displayProperty = [
-        {property:'grnCode', datatype:'string'},
-        {property:getSupplierName, datatype:'function'},
-        {property:'billNo', datatype:'string'},
-        {property:'grnDate', datatype:'string'},
-        {property:getTotalAmount, datatype:'function'},
-        {property:getStatus, datatype:'function'}]
+            {property:'grnCode', datatype:'string'},
+            {property:getSupplierName, datatype:'function'},
+            {property:'billNo', datatype:'string'},
+            {property:'grnDate', datatype:'string'},
+            {property:getTotalAmount, datatype:'function'},
+            {property:getPaidAmount, datatype:'function'},
+            {property:getBalanceAmount, datatype:'function'},
+            {property:getStatus, datatype:'function'}]
 
     fillDataIntoTable(grnTable, GRNList ,displayProperty ,refillPGrnForm, deleteGRN, printPOrder, true, userPrivilege);
 
@@ -33,7 +35,7 @@ const refreshGrnTable = () =>{
 
     $('#grnTable').dataTable({
         "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollX": false,// Enable horizontal scrollbar
         "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
     });
 }
@@ -94,19 +96,26 @@ const getMaterialList = () => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.grnStatus.name === 'Pending') {
-        return '<p class= "btn btn-outline-info">' + rowOb.grnStatus.name +'</p>';
+        return '<p class= "btn btn-outline-info btn-sm mt-3">' + rowOb.grnStatus.name +'</p>';
     }
     if (rowOb.grnStatus.name === 'Created') {
-        return '<p class = "btn btn-outline-success">' + rowOb.grnStatus.name +'</p>';
+        return '<p class = "btn btn-outline-success btn-sm mt-3">' + rowOb.grnStatus.name +'</p>';
     }
     if (rowOb.grnStatus.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.grnStatus.name + '</p>';
+        return '<p class= "btn btn-outline-danger btn-sm mt-3">' + rowOb.grnStatus.name + '</p>';
     }
 }
 
 const getTotalAmount = (rowOb) => {
     return parseFloat(rowOb.totalAmount).toFixed(2)
 }
+const getBalanceAmount = (rowOb) => {
+    return parseFloat(rowOb.balanceAmount).toFixed(2)
+}
+const getPaidAmount = (rowOb) => {
+    return parseFloat(rowOb.paidAmount).toFixed(2)
+}
+
 const reFreshGRNForm = () => {
 
     grn = {};

@@ -138,4 +138,10 @@ public class SupplierServiceImpl implements SupplierService {
 
         return supplierRepository.list();
     }
+
+    @Override
+    public List<Supplier> getGrnSupplierList() {
+
+        return supplierRepository.getGrnSupplierList();
+    }
 }

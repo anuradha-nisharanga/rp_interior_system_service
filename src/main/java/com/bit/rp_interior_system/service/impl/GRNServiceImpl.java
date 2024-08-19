@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -63,6 +64,9 @@ public class GRNServiceImpl implements GRNService {
         try {
             grn.setCreatedUser(logedUser.getId());
             grn.setCreatedAt(LocalDateTime.now());
+            grn.setBalanceAmount(grn.getTotalAmount());
+            grn.setPaidAmount(BigDecimal.valueOf(0.00));
+            grn.setSupplier(grn.getSupplier());
 
             //set next order code
             String nextNumber = grnRepository.getNextGrnNumber();
@@ -80,9 +84,16 @@ public class GRNServiceImpl implements GRNService {
                     Material material = OptionalMaterial.get();
                     material.setUnitPrice(grnMaterial.getUnitPrice());
                     log.info("material ID: {} | unit price : {}", grnMaterial.getId(), grnMaterial.getUnitPrice() );
+
+                    Integer currentQty = material.getQuantity();
+                    Integer updatedQty = currentQty + grnMaterial.getOrderQty();
+
+                    material.setQuantity(updatedQty);
+
                     materialRepository.save(material);
                 }
             }
+
             grnRepository.save(grn);
 
             return "OK";
@@ -123,10 +134,8 @@ public class GRNServiceImpl implements GRNService {
                     log.info("material ID: {} | unit price : {}", grnMaterial.getId(), grnMaterial.getUnitPrice() );
                     materialRepository.save(material);
                 }
-
             }
             grnRepository.save(grn);
-
             return "OK";
         }
         catch (Exception e){
@@ -161,5 +170,11 @@ public class GRNServiceImpl implements GRNService {
         catch (Exception e){
             return "Delete not completed : " + e.getMessage();
         }
+    }
+
+    @Override
+    public List<GRN> getGrnListBySupplier(Integer supplierId) {
+
+        return grnRepository.supplierGrnList(supplierId);
     }
 }
