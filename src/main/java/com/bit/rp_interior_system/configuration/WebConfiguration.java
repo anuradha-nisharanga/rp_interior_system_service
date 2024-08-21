@@ -33,13 +33,14 @@ public class WebConfiguration {
                             .requestMatchers("/purchase-order/**").hasAnyAuthority("Admin","Manager","Store-Manager")
                             .requestMatchers("/grn/**").hasAnyAuthority("Admin","Manager","Store-Manager")
                             .requestMatchers("/supplier-payments/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/product/**").hasAnyAuthority("Admin","Manager")
                             .anyRequest().authenticated();
 
                 })
                 //login form detailed
                 .formLogin(login -> {
                     login.loginPage("/login")
-                            .defaultSuccessUrl("/privilege/ui",true)
+                            .defaultSuccessUrl("/index",true)
                             .failureUrl("/login?error=usernamepassworderror")
                             .usernameParameter("username")
                             .passwordParameter("password");
@@ -55,6 +56,7 @@ public class WebConfiguration {
                 //exception
                 .exceptionHandling(exception ->{
                     exception.accessDeniedPage("/error");
+                    exception.accessDeniedPage("/login?error=usernamepassworderror");
                 })
 
                 //request url without in chrome like js

@@ -173,15 +173,7 @@ const reFreshGRNForm = () => {
     generateDateRange();
 }
 
-/*
-* MAIN FORM FUNCTION
-* FILTER PURCHASE ORDER LIST
-*/
-const filterPurchaseOrderList = () => {
 
-    grnpurchaseOrderList = ajaxGetRequest("/purchase-order/supplier/" + JSON.parse(gSupplierList.value).id )
-    fillDataIntoSelect( grnPurchaseOrderList, 'Select Purchase Order *', grnpurchaseOrderList, 'purchaseOrderCode','');
-}
 
 /*
 * MAIN FORM FUNCTION
