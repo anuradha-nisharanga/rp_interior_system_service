@@ -30,7 +30,7 @@ public class GRNHasMaterial {
 
     @Column(name = "quantity")
     @NotNull
-    private Integer quantity;
+    private Integer orderQty;
 
     @Column(name = "line_price")
     @NotNull

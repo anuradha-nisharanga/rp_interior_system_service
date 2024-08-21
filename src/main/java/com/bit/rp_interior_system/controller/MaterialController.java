@@ -62,6 +62,12 @@ public class MaterialController {
         return materialService.getSupplierProvideMaterials(supplierId);
     }
 
+    @GetMapping("/purchase-order/{id}")
+    public List<Material> getMaterialsByPurchaseOrder(@PathVariable ("id") Integer purchaseOrderId){
+
+        return materialService.getMaterialsByPurchaseOrder(purchaseOrderId);
+    }
+
     @GetMapping("/supplier-not-provide/{supId}")
     public List<Material> getSupplierNotProvideMaterials(@PathVariable ("supId") Integer supplierId){
 

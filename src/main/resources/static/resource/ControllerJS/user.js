@@ -137,10 +137,10 @@ const printUser = (rowOb, rowInd) => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.status == true) {
-        return '<p class= "btn btn-outline-success">' + "Active" +'</p>';
+        return '<p class= "btn btn-outline-success btn-sm mt-3">' + "Active" +'</p>';
     }
     if (rowOb.status == false) {
-        return '<p class = "btn btn-outline-dark">' + "In-Active" +'</p>';
+        return '<p class = "btn btn-outline-dark btn-sm mt-3">' + "In-Active" +'</p>';
     }
 }
 

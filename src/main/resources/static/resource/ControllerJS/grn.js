@@ -3,80 +3,83 @@ window.addEventListener('load',()=>{
     userPrivilege = ajaxGetRequest("/privilege/by-logged-user-module/grn");
     console.log(userPrivilege);
 
-    refreshPOderTable();
-    reFreshPurchaseOrderForm();
+    refreshGrnTable();
+    reFreshGRNForm();
 })
 
 // get data into table
-const refreshPOderTable = () =>{
+const refreshGrnTable = () =>{
 
-    purchaseOrders = ajaxGetRequest("/purchase-order/view");
+    GRNList = ajaxGetRequest("/grn/view");
 
         const displayProperty = [
-        {property:'purchaseOrderCode', datatype:'string'},
-        {property:getSupplierName, datatype:'function'},
-        {property:getMaterialList, datatype:'function'},
-        {property:'requiredDate', datatype:'string'},
-        {property:getTotalAmount, datatype:'function'},
-        {property:getStatus, datatype:'function'}]
+            {property:'grnCode', datatype:'string'},
+            {property:getSupplierName, datatype:'function'},
+            {property:'billNo', datatype:'string'},
+            {property:'grnDate', datatype:'string'},
+            {property:getTotalAmount, datatype:'function'},
+            {property:getPaidAmount, datatype:'function'},
+            {property:getBalanceAmount, datatype:'function'},
+            {property:getStatus, datatype:'function'}]
 
-    fillDataIntoTable(pOrderTable, purchaseOrders ,displayProperty ,refillPOrderForm, deletePOrder, printPOrder, true, userPrivilege);
+    fillDataIntoTable(grnTable, GRNList ,displayProperty ,refillPGrnForm, deleteGRN, printPOrder, true, userPrivilege);
 
     //disable delete button
-    purchaseOrders.forEach((element, index) => {
-        if(element.purchaseOrderStatus.name === "Deleted"){
+    GRNList.forEach((element, index) => {
+        if(element.grnStatus.name === "Deleted"){
             if (userPrivilege.delete) {
-                pOrderTable.children[1].children[index].children[7].children[1].disabled = true; //you can also use disabled
+                grnTable.children[1].children[index].children[7].children[1].disabled = true; //you can also use disabled
             }
         }
     });
 
-    $('#pOrderTable').dataTable({
+    $('#grnTable').dataTable({
         "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollX": false,// Enable horizontal scrollbar
         "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
     });
 }
 
 //create refill function
-const refillPOrderForm =(rowOb,rowInd)=>{
-    $('#modalPOrderAddForm').modal('show');
+const refillPGrnForm =(rowOb,rowInd)=>{
+    $('#modalGRNAddForm').modal('show');
 
-    purchaseOrder = JSON.parse(JSON.stringify(rowOb));
-    oldPurchaseOrder = JSON.parse(JSON.stringify(rowOb));
+    grn = JSON.parse(JSON.stringify(rowOb));
+    oldGrn = JSON.parse(JSON.stringify(rowOb));
 
-    console.log(purchaseOrder);
-    console.log(oldPurchaseOrder);
+    grnDate.value = grn.grnDate;
+    grnTotal.value = grn.totalAmount;
+    grnBillNo.value = grn.billNo;
 
-    pRequiredDate.value = purchaseOrder.requiredDate;
-    pTotalAmount.value = purchaseOrder.totalAmount;
+    if(grn.note != null)
+        gNote.value = grn.note; else gNote.value = "";
 
-    if(purchaseOrder.note != null)
-        pNote.value = purchaseOrder.note; else pNote.value = "";
+    // select supplier
+    fillDataIntoSelect( gSupplierList, 'Select Supplier *', grnSupplierList,'name', grn.purchaseOrder.supplier.name);
+    gSupplierList.disabled = true;
 
-    // selectDesignation
-    fillDataIntoSelect( pSupplierList, 'Select Supplier *', supplierList,'name', purchaseOrder.supplier.name);
-    pSupplierList.disabled = true;
+    // select status
+    fillDataIntoSelect( grnStatus, 'Select Status *', grnStatusList, 'name', grn.grnStatus.name);
 
-    // selectEmployeeStatus
-    fillDataIntoSelect( purchaseOrderStatus, 'Select Status *', purchaseOrderStatusList, 'name', purchaseOrder.purchaseOrderStatus.name);
+    grnpurchaseOrderList = ajaxGetRequest("/purchase-order/supplier/" + JSON.parse(gSupplierList.value).id )
+    fillDataIntoSelect( grnPurchaseOrderList, 'Select Purchase Order *', grnpurchaseOrderList, 'purchaseOrderCode', grn.purchaseOrder.purchaseOrderCode);
+
 
     //set valid color for element
-
     console.log(userPrivilege);
 
-    pAddButton.disabled = "true";
-    $("#pAddButton").css("cursor","not-allowed");
+    grnAddButton.disabled = "true";
+    $("#grnAddButton").css("cursor","not-allowed");
 
     if(userPrivilege.update) {
-        pUpdateButton.disabled = false;
-        $("#pUpdateButton").css("cursor","pointer");
+        grnUpdateButton.disabled = false;
+        $("#grnUpdateButton").css("cursor","pointer");
     }else{
-        pUpdateButton.disabled = true;
-        $("#pUpdateButton").css("cursor","not-allowed");
+        grnUpdateButton.disabled = true;
+        $("#grnUpdateButton").css("cursor","not-allowed");
     }
 
-    refreshInnerPOrderFormAndTable();
+    refreshInnerGRNFormAndTable();
     updateTotalAmount();
 }
 
@@ -85,99 +88,129 @@ const printPOrder = (rowOb, rowInd) => {
 }
 
 const getSupplierName = (rowOb) =>{
-    return rowOb.supplier.name;
+    return rowOb.purchaseOrder.supplier.name;
 }
 const getMaterialList = () => {
     return "Item List"
 }
 const getStatus = (rowOb) =>{
     console.log('status')
-    if (rowOb.purchaseOrderStatus.name === 'Requested') {
-        return '<p class= "btn btn-outline-info">' + rowOb.purchaseOrderStatus.name +'</p>';
+    if (rowOb.grnStatus.name === 'Pending') {
+        return '<p class= "btn btn-outline-info btn-sm mt-3">' + rowOb.grnStatus.name +'</p>';
     }
-    if (rowOb.purchaseOrderStatus.name === 'Received') {
-        return '<p class = "btn btn-outline-success">' + rowOb.purchaseOrderStatus.name +'</p>';
+    if (rowOb.grnStatus.name === 'Created') {
+        return '<p class = "btn btn-outline-success btn-sm mt-3">' + rowOb.grnStatus.name +'</p>';
     }
-    if (rowOb.purchaseOrderStatus.name === 'Cancel') {
-        return '<p class= "btn btn-outline-warning">' + rowOb.purchaseOrderStatus.name + '</p>';
-    }
-    if (rowOb.purchaseOrderStatus.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.purchaseOrderStatus.name + '</p>';
+    if (rowOb.grnStatus.name === 'Deleted') {
+        return '<p class= "btn btn-outline-danger btn-sm mt-3">' + rowOb.grnStatus.name + '</p>';
     }
 }
 
 const getTotalAmount = (rowOb) => {
     return parseFloat(rowOb.totalAmount).toFixed(2)
 }
-const reFreshPurchaseOrderForm = () => {
+const getBalanceAmount = (rowOb) => {
+    return parseFloat(rowOb.balanceAmount).toFixed(2)
+}
+const getPaidAmount = (rowOb) => {
+    return parseFloat(rowOb.paidAmount).toFixed(2)
+}
 
-    purchaseOrder = {};
-    oldPurchaseOrder = null;
+const reFreshGRNForm = () => {
+
+    grn = {};
+    oldGrn = null;
 
     // create new array to add to the
-    purchaseOrder.materialList = [];
+    grn.grnMaterialList = [];
 
-    supplierList = ajaxGetRequest("/supplier/list");
-    purchaseOrderStatusList = ajaxGetRequest("/purchase-order/status");
+    // get active supplier list
+    grnSupplierList = ajaxGetRequest("/supplier/list");
 
-    fillDataIntoSelect( pSupplierList, 'Select Supplier *', supplierList, 'name');
-    pSupplierList.disabled = false;
+    // After select supplier purchase order list filter out -> filterPurchaseOrderList()
+    // After select Purchase order material list filter out -> filterMaterialList()
 
-    fillDataIntoSelect(purchaseOrderStatus, 'Select Status *', purchaseOrderStatusList, 'name', 'Requested');
+    fillDataIntoSelect( gSupplierList, 'Select Supplier *', grnSupplierList, 'name');
+    gSupplierList.disabled = false;
 
-    // Bind selected status to purchase order
-    purchaseOrder.purchaseOrderStatus = JSON.parse(purchaseOrderStatus.value);
-    purchaseOrderStatus.style.border = '2px solid green'
+    // GRN Status List
+    grnStatusList = ajaxGetRequest("/grn/status");
+    fillDataIntoSelect(grnStatus, 'Select Status *', grnStatusList, 'name', 'Created');
+
+    // Bind selected status to grn
+    grn.grnStatus = JSON.parse(grnStatus.value);
+    grnStatus.style.border = '2px solid green';
 
     //need to empty all element
-    pRequiredDate.value = '';
-    pRequiredDate.style.border = '1px solid #ced4da';
+    grnDate.value = '';
+    grnDate.style.border = '1px solid #ced4da';
 
-    pTotalAmount.value = 'Automatically update';
-    pTotalAmount.disabled = true;
-    pTotalAmount.style.border = '1px solid #ced4da';
+    grnTotal.value = 'Automatically update';
+    grnTotal.disabled = true;
+    grnTotal.style.border = '1px solid #ced4da';
 
-    pNote.value = '';
-    pNote.style.border ='1px solid #ced4da';
+    gNote.value = '';
+    gNote.style.border ='1px solid #ced4da';
 
-    pUpdateButton.disabled = true;
-    $("#pUpdateButton").css("cursor","not-allowed");
+    grnBillNo.value = '';
+    grnBillNo.style.border ='1px solid #ced4da';
+
+    grnUpdateButton.disabled = true;
+    $("#grnUpdateButton").css("cursor","not-allowed");
 
     if(userPrivilege.insert) {
-        pAddButton.disabled = "";
-        $("#pAddButton").css("cursor","pointer");
+        grnAddButton.disabled = "";
+        $("#grnAddButton").css("cursor","pointer");
     }else{
-        pAddButton.disabled = "true";
-        $("#pAddButton").css("cursor","not-allowed");
+        grnAddButton.disabled = "true";
+        $("#grnAddButton").css("cursor","not-allowed");
     }
 
-    // Refresh Inner form and table
-    refreshInnerPOrderFormAndTable();
+    // Refresh Inner GRN form and table
+    refreshInnerGRNFormAndTable();
 
     // Set fix date range
     generateDateRange();
 }
 
-const refreshInnerPOrderFormAndTable = () =>{
 
-    pOrderMaterial = {};
-    oldPOrderMaterial = null;
 
-    availableMaterialList = ajaxGetRequest("/material/available-list")
-    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name');
+/*
+* MAIN FORM FUNCTION
+* FILTER GRN Material LIST
+*/
+const filterGrnMaterialList = () => {
+
+    grnMaterialList = ajaxGetRequest("/material/purchase-order/" + JSON.parse(grnPurchaseOrderList.value).id )
+    fillDataIntoSelect( grnMaterials, 'Select Material *', grnMaterialList, 'name',);
+}
+
+const refreshInnerGRNFormAndTable = () =>{
+
+    grnMaterial = {};
+    oldGrnMaterial = null;
+
+    if (grn.purchaseOrder == null){
+        availableGrnMaterialList = ajaxGetRequest("/material/view");
+        fillDataIntoSelect( grnMaterials, 'Select Material *', availableGrnMaterialList, 'name');
+    }
+    else{
+        availableGrnMaterialList = ajaxGetRequest("/material/purchase-order/" + JSON.parse(grnPurchaseOrderList.value).id )
+        fillDataIntoSelect( grnMaterials, 'Select Material *', availableGrnMaterialList, 'name');
+    }
 
     //set values to empty and set input field default colors
-    purchaseOrderMaterial.value = '';
-    purchaseOrderMaterial.style.border = '1px solid #ced4da';
+    // purchaseOrderMaterial.value = '';
+    // purchaseOrderMaterial.style.border = '1px solid #ced4da';
 
-    pOrderUnitPrice.value = '';
-    pOrderUnitPrice.style.border = '1px solid #ced4da';
+    grnUnitPrice.value = '';
+    grnUnitPrice.style.border = '1px solid #ced4da';
 
-    pOrderQuantity.value = '';
-    pOrderQuantity.style.border = '1px solid #ced4da';
+    grnQuantity.value = '';
+    grnQuantity.style.border = '1px solid #ced4da';
 
-    pOrderLineCost.value = '';
-    pOrderLineCost.style.border = '1px solid #ced4da';
+    grnLineCost.value = '';
+    grnLineCost.style.border = '1px solid #ced4da';
 
     let columns = [
         {property: getMaterialName, datatype: 'function'},
@@ -187,15 +220,17 @@ const refreshInnerPOrderFormAndTable = () =>{
     ]
 
     // refresh inner Table
-    fillDataIntoInnerTable(pOrderInnerTable, purchaseOrder.materialList, columns, innerTableRefill, innerTableDelete, true, userPrivilege )
+    fillDataIntoInnerTable(grnInnerTable, grn.grnMaterialList, columns, innerTableRefill, innerTableDelete, true, userPrivilege )
 }
 
 const getMaterialName = (ob) =>{
     return ob.material.name;
 }
+
 const getUnitPrice = (ob) =>{
     return parseFloat(ob.unitPrice).toFixed(2);
 }
+
 const getLinePrice = (ob) =>{
     return parseFloat(ob.linePrice).toFixed(2);
 }
@@ -204,30 +239,55 @@ const innerTableRefill = (rowOb, index) => {
     innerRowInd = index;
     availableMaterialList = ajaxGetRequest("/material/available-list");
 
-    fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', availableMaterialList, 'name', rowOb.material.name);
+    fillDataIntoSelect( grnMaterials, 'Select Material *', availableMaterialList, 'name', rowOb.material.name);
 
 
-    pOrderUnitPrice.value = parseFloat(rowOb.unitPrice).toFixed(2);
+    grnUnitPrice.value = parseFloat(rowOb.unitPrice).toFixed(2);
 
-    pOrderQuantity.value = rowOb.orderQty
+    grnQuantity.value = rowOb.orderQty
 
-    pOrderLineCost.value = parseFloat(rowOb.linePrice).toFixed(2);
+    grnLineCost.value = parseFloat(rowOb.linePrice).toFixed(2);
 }
 
 const buttonInnerPurchaseUpdate = () => {
 
-    if (pOrderQuantity.value != purchaseOrder.materialList[innerRowInd].orderQty){
-        let userConfirmToUpdateInnerForm = confirm("are you sure to update the quantity?");
+     let innerUpdates = "";
+
+    if (grnUnitPrice.value != grn.grnMaterialList[innerRowInd].unitPrice){
+        innerUpdates = innerUpdates + 'Unit Price changed...! \n';
+    }
+
+    if (grnQuantity.value != grn.grnMaterialList[innerRowInd].orderQty){
+
+        innerUpdates = innerUpdates + 'Order Quantity changed...! \n';
+    }
+
+    if (innerUpdates != ""){
+        let userConfirmToUpdateInnerForm = confirm("are you sure to update the ?" + innerUpdates);
         if (userConfirmToUpdateInnerForm){
-            purchaseOrder.materialList[innerRowInd].orderQty = pOrderQuantity.value;
-            purchaseOrder.materialList[innerRowInd].linePrice = pOrderLineCost.value;
-            refreshInnerPOrderFormAndTable();
+            grn.grnMaterialList[innerRowInd].orderQty = grnQuantity.value;
+            grn.grnMaterialList[innerRowInd].linePrice = grnLineCost.value;
+            grn.grnMaterialList[innerRowInd].unitPrice = grnUnitPrice.value;
+            refreshInnerGRNFormAndTable();
             updateTotalAmount();
         }
     }
     else {
         alert("Noting to Update! ")
     }
+
+    // if (grnQuantity.value != grn.grnMaterialList[innerRowInd].orderQty){
+    //     let userConfirmToUpdateInnerForm = confirm("are you sure to update the quantity?");
+    //     if (userConfirmToUpdateInnerForm){
+    //         grn.grnMaterialList[innerRowInd].orderQty = grnQuantity.value;
+    //         grn.grnMaterialList[innerRowInd].linePrice = grnLineCost.value;
+    //         refreshInnerGRNFormAndTable();
+    //         updateTotalAmount();
+    //     }
+    // }
+    // else {
+    //     alert("Noting to Update! ")
+    // }
 }
 
 const innerTableDelete = (rowOb, index) => {
@@ -236,10 +296,10 @@ const innerTableDelete = (rowOb, index) => {
     "Material Name : " + rowOb.material.name);
 
     if (userConfirm){
-        purchaseOrder.materialList.splice(index, 1);
+        grn.grnMaterialList.splice(index, 1);
         alert("Remove Successfully..!");
         updateTotalAmount();
-        refreshInnerPOrderFormAndTable();
+        refreshInnerGRNFormAndTable();
     }
 }
 
@@ -247,26 +307,26 @@ const checkInnerPurchaseFormError = () => {
 
     let errors = "";
 
-    if(pOrderMaterial.material == null){
-        errors = errors + 'please Enter Valid Material name...! \n';
+    if(grnMaterial.material == null){
+        errors = errors + 'please Select Valid Material name...! \n';
     }
 
-    if(pOrderMaterial.orderQty == null){
+    if(grnMaterial.orderQty == null){
         errors = errors + 'please Enter Valid Order Quantity...! \n';
     }
 
-    if(pOrderMaterial.unitPrice == null){
+    if(grnMaterial.unitPrice == null){
         errors = errors + 'please Enter Valid Unit Price...! \n';
     }
 
-    if(pOrderMaterial.linePrice == null){
+    if(grnMaterial.linePrice == null){
         errors = errors + 'please Enter Valid  Line Price...! \n';
     }
 
     return errors;
 }
 
-const buttonInnerPurchaseAdd = () => {
+const buttonInnerGrnAdd = () => {
     console.log("add inner item check")
 
     // need to check errors
@@ -274,16 +334,16 @@ const buttonInnerPurchaseAdd = () => {
     if (errors == ""){
 
         let userConfirm = confirm("Are you Sure to add materials \n"
-            + "Material name : " + pOrderMaterial.material.name + "\n"
-            + "Material qty : "  + pOrderMaterial.orderQty + "\n"
-            + "Material qty : "  + pOrderMaterial.unitPrice + "\n"
-            + "Material qty : "  + pOrderMaterial.linePrice + "\n");
+            + "Material name : " + grnMaterial.material.name + "\n"
+            + "Material qty : "  + grnMaterial.orderQty + "\n"
+            + "Material qty : "  + grnMaterial.unitPrice + "\n"
+            + "Material qty : "  + grnMaterial.linePrice + "\n");
 
         if (userConfirm){
             alert("Order Item Added Successfully!")
             // add object into array
-            purchaseOrder.materialList.push(pOrderMaterial);
-            refreshInnerPOrderFormAndTable();
+            grn.grnMaterialList.push(grnMaterial);
+            refreshInnerGRNFormAndTable();
             updateTotalAmount();
 
         }
@@ -292,50 +352,47 @@ const buttonInnerPurchaseAdd = () => {
     }
 }
 
-
-
-
 const generateUnitPrice = () => {
 
-    let selectedItem = JSON.parse(purchaseOrderMaterial.value);
+    let selectedItem = JSON.parse(grnMaterials.value);
 
-    let existIndex = purchaseOrder.materialList.map(item => item.material.id ).indexOf(selectedItem.id);
+    let existIndex = grn.grnMaterialList.map(item => item.material.id ).indexOf(selectedItem.id);
 
     if (existIndex != -1){
         alert("Material already exist")
-        purchaseMaterialAdd.disabled = true;
-        purchaseOrderMaterial.value = '';
-        purchaseOrderMaterial.style.border = '1px solid #ced4da';
+        grnMaterialAdd.disabled = true;
+        grnMaterials.value = '';
+        grnMaterials.style.border = '1px solid #ced4da';
     }
     else{
-        pOrderUnitPrice.value = parseFloat(selectedItem.unitPrice).toFixed(2);
-        pOrderMaterial.unitPrice = pOrderUnitPrice.value;
-        pOrderUnitPrice.style.border = '2px solid green';
-        purchaseMaterialAdd.disabled = false;
-        pOrderQuantity.value = '';
-        pOrderQuantity.style.border = '1px solid #ced4da';
-        pOrderMaterial.orderQty = null;
-        pOrderLineCost.value = '';
-        pOrderLineCost.style.border = '1px solid #ced4da';
-        pOrderMaterial.linePrice = null;
+        grnUnitPrice.value = parseFloat(selectedItem.unitPrice).toFixed(2);
+        grnMaterial.unitPrice = grnUnitPrice.value;
+        grnUnitPrice.style.border = '2px solid green';
+        grnMaterialAdd.disabled = false;
+        grnQuantity.value = '';
+        grnQuantity.style.border = '1px solid #ced4da';
+        grnMaterial.orderQty = null;
+        grnLineCost.value = '';
+        grnLineCost.style.border = '1px solid #ced4da';
+        grnMaterial.linePrice = null;
     }
 }
 
 const generateLinePrice = () => {
-    let qty = pOrderQuantity.value;
+    let qty = grnQuantity.value;
     if(new RegExp("^[1-9][0-9]{0,3}$").test(qty)){
-        pOrderLineCost.value = (parseFloat(pOrderUnitPrice.value) * parseFloat(pOrderQuantity.value)).toFixed(2);
-        pOrderMaterial.linePrice = pOrderLineCost.value;
-        pOrderLineCost.style.border = '2px solid green'
+        grnLineCost.value = (parseFloat(grnUnitPrice.value) * parseFloat(grnQuantity.value)).toFixed(2);
+        grnMaterial.linePrice = grnLineCost.value;
+        grnLineCost.style.border = '2px solid green'
     }
 }
 
 const generateDecimalPoint = () =>{
-    let uniPrice = pOrderUnitPrice.value;
+    let uniPrice = grnUnitPrice.value;
     if(new RegExp("^[1-9][0-9]{0,7}[.][0-9]{2}$").test(uniPrice)){
-        pOrderUnitPrice.value = parseFloat(pOrderUnitPrice.value).toFixed(2);
-        pOrderMaterial.unitPrice = pOrderUnitPrice.value;
-        pOrderLineCost.style.border = '2px solid green';
+        grnUnitPrice.value = parseFloat(grnUnitPrice.value).toFixed(2);
+        grnMaterial.unitPrice = grnUnitPrice.value;
+        grnLineCost.style.border = '2px solid green';
     }
 }
 
@@ -344,22 +401,22 @@ const updateTotalAmount =() =>{
 
     let totalAmount = 0.00;
 
-    purchaseOrder.materialList.forEach(element => {
+    grn.grnMaterialList.forEach(element => {
         totalAmount = parseFloat(totalAmount) + parseFloat(element.linePrice);
     })
 
     if (totalAmount == 0.00){
-        pTotalAmount.value = 'Automatically Update';
-        pTotalAmount.style.border = '1px solid #ced4da'
-        pTotalAmount.disabled = true;
-        purchaseOrder.totalAmount = null;
+        grnTotal.value = 'Automatically Update';
+        grnTotal.style.border = '1px solid #ced4da'
+        grnTotal.disabled = true;
+        grn.totalAmount = null;
     }
     else{
-        pTotalAmount.disabled = false;
-        pTotalAmount.value = parseFloat(totalAmount).toFixed(2);
-        pTotalAmount.style.border = '2px solid green'
+        grnTotal.disabled = false;
+        grnTotal.value = parseFloat(totalAmount).toFixed(2);
+        grnTotal.style.border = '2px solid green'
 
-        purchaseOrder.totalAmount = pTotalAmount.value;
+        grn.totalAmount = grnTotal.value;
     }
 }
 
@@ -381,7 +438,7 @@ const generateDateRange =() =>{
         minDay ='0' + minDay;
     }
 
-    pRequiredDate.min = currentDate.getFullYear() + '-' + minMonth + '-' + minDay;
+    grnDate.min = currentDate.getFullYear() + '-' + minMonth + '-' + minDay;
     maxDate.setDate(maxDate.getDate() + 30);
 
     let maxDay = maxDate.getDate();
@@ -393,30 +450,34 @@ const generateDateRange =() =>{
     if (maxMonth < 10) {
         maxMonth = '0' + maxMonth;
     }
-    pRequiredDate.max = maxDate.getFullYear()+ '-' + maxMonth+ '-' + maxDay;
+    grnDate.max = maxDate.getFullYear()+ '-' + maxMonth+ '-' + maxDay;
 }
 
 
 // create function for check form Error
 const checkError = () => {
-    // console.log(employee);
+
     //need to check all required property or field
     let errors = '';
 
-    if (purchaseOrder.supplier == null) {
-        errors = errors + 'please Select Supplier...! \n';
+    // if (grn.supplier == null) {
+    //     errors = errors + 'please Select Supplier...! \n';
+    // }
+
+    if (grn.grnDate == null) {
+        errors = errors + 'please Select GRN Date...! \n';
     }
 
-    if (purchaseOrder.requiredDate == null) {
-        errors = errors + 'please Select Required Date...! \n';
+    if (grn.totalAmount == null) {
+        errors = errors + 'please ADd Total Amount...! \n';
     }
 
-    if (purchaseOrder.totalAmount == null) {
-        errors = errors + 'please Add Total Amount...! \n';
+    if (grn.grnStatus == null) {
+        errors = errors + 'please Select GRN Status...! \n';
     }
 
-    if (purchaseOrder.purchaseOrderStatus == null) {
-        errors = errors + 'please Select Purchase Order Status...! \n';
+    if (grn.billNo == null){
+        errors = errors + 'please add Bill no...! \n';
     }
 
     return errors;
@@ -424,32 +485,33 @@ const checkError = () => {
 }
 
 //create function for add employee
-const buttonPOrderAdd = () =>{
+const buttonGrnAdd = () =>{
 
     //1.need to check form errors --> checkError()
     let formErrors = checkError()
     if (formErrors == '') {
 
         //2.need to get user confirmation
-        let userConfirm = window.confirm('Are you sure to add this Purchase Order?\n'
-            + '\n Supplier is : ' + purchaseOrder.supplier.name  + '\n Required date is : ' + purchaseOrder.requiredDate
-        + '\n Total Amount is: ' + purchaseOrder.totalAmount);
+        let userConfirm = window.confirm('Are you sure to add this GRN?\n'
+            + '\n Purchase order is : ' + grn.purchaseOrder.purchaseOrderCode  + '\n GRN date is : ' + grn.grnDate
+        + '\n Total Amount is: ' + grn.totalAmount);
 
         if(userConfirm){
             //3.pass data into backend
             // call ajaxRequestBody Function
             //ajaxRequestBody("/url" , "METHOD", object)
-            let serverResponse = ajaxRequestBody("/purchase-order/create", "POST", purchaseOrder);
+            let serverResponse = ajaxRequestBody("/grn/create", "POST", grn);
 
             //4.check backend response
             if (serverResponse == 'OK') {
                 alert('Save Successfully......!' );
                 //need to refresh table and form
-                refreshPOderTable();
-                pOrderMaterialForm.reset();
-                reFreshPurchaseOrderForm();
+                // refreshPOderTable();
+                grnMaterialForm.reset();
+                reFreshGRNForm();
+                $('#modalGRNAddForm').modal('hide');
                 //need to hide modal
-                $('#modalPOrderAddForm').modal('hide');
+
 
             } else {
                 alert('Save Not Successful....! Have Some Errors \n' + serverResponse);
@@ -464,35 +526,39 @@ const buttonPOrderAdd = () =>{
 const checkUpdate = ()=>{
     let updates = "";
 
-    if (purchaseOrder.requiredDate != oldPurchaseOrder.requiredDate){
-        updates = updates + "Required date is change " + oldPurchaseOrder.requiredDate + "into" + purchaseOrder.requiredDate + "\n";
+    if (grn.grnDate != oldGrn.grnDate){
+        updates = updates + "Create date is change " + oldGrn.grnDate + " into " + grn.grnDate + "\n";
     }
 
-    if(purchaseOrder.totalAmount != oldPurchaseOrder.totalAmount){
-        updates = updates + "Total Amount is change " + oldPurchaseOrder.totalAmount + "into" + purchaseOrder.totalAmount + "\n";
+    if(grn.totalAmount != oldGrn.totalAmount){
+        updates = updates + "Total Amount is change " + oldGrn.totalAmount + " into " + grn.totalAmount + "\n";
     }
 
-    if(purchaseOrder.purchaseOrderStatus != oldPurchaseOrder.purchaseOrderStatus){
-        updates = updates + "Status is change " + purchaseOrder.purchaseOrderStatus + "into" + oldPurchaseOrder.purchaseOrderStatus + "\n";
+    if(grn.grnStatus != oldGrn.grnStatus){
+        updates = updates + "Status is change " + grn.grnStatus + " into " + oldGrn.grnStatus + "\n";
     }
 
-    if(purchaseOrder.note != oldPurchaseOrder.note){
-        updates = updates + "Note is change \n";
+    if(grn.note != oldGrn.note){
+        updates = updates + " Note is change \n";
     }
 
-    if (purchaseOrder.materialList.length != oldPurchaseOrder.materialList.length){
-        updates = updates + "Order Materials are change \n";
+    if (grn.billNo != oldGrn.billNo){
+        updates = updates + " Bill no is change " + grn.billNo + " into " + oldGrn.billNo +"\n";
+    }
+
+    if (grn.grnMaterialList.length != oldGrn.grnMaterialList.length){
+        updates = updates + "GRN Materials are change \n";
     }
     else{
         let extMCount = 0;
-        for(const newOrderMaterial of purchaseOrder.materialList ){
-            for (const oldOrderMaterial of oldPurchaseOrder.materialList){
+        for(const newOrderMaterial of grn.grnMaterialList ){
+            for (const oldOrderMaterial of oldGrn.grnMaterialList){
                 if(newOrderMaterial.material.id == oldOrderMaterial.material.id ){
                     extMCount = extMCount+1;
                 }
             }
         }
-        if (extMCount != purchaseOrder.materialList.length){
+        if (extMCount != grn.grnMaterialList.length){
             updates = updates + "Order Materials are change \n";
         }
     }
@@ -501,8 +567,8 @@ const checkUpdate = ()=>{
 }
 
 //define function for employee update
-const buttonPOrderUpdate = () =>{
-    console.log("Update button");
+const buttonGrnUpdate = () =>{
+    console.log("Update button");``
     //check from error
     let error = checkError();
     if(error == ""){
@@ -512,15 +578,15 @@ const buttonPOrderUpdate = () =>{
             //cell put service
             let userConfirm = confirm("Are you sure following changer...? \n" + updates);
             if(userConfirm){
-                let updateServicesResponses = ajaxRequestBody("/purchase-order/update","PUT", purchaseOrder);
+                let updateServicesResponses = ajaxRequestBody("/grn/update","PUT", grn);
                 if (updateServicesResponses == "OK") {
                     alert('Update Successfully......!' );
                     //need to refresh table and form
-                    refreshPOderTable();
-                    pOrderMaterialForm.reset();
-                    reFreshPurchaseOrderForm();
+                    refreshGrnTable();
+                    grnMaterialForm.reset();
+                    reFreshGRNForm();
                     //need to hide modal
-                    $('#modalPOrderAddForm').modal('hide');
+                    $('#modalGRNAddForm').modal('hide');
 
                 } else {
                     alert(' Not Updates....! Have Some Errors \n' + updateServicesResponses);
@@ -535,15 +601,15 @@ const buttonPOrderUpdate = () =>{
     }
 }
 
-const deletePOrder =(rowOb, rowInd) =>{
-    const userConfirm = confirm('Do you want to delete this Purchase Order \n' + rowOb.purchaseOrderCode);
+const deleteGRN =(rowOb, rowInd) =>{
+    const userConfirm = confirm('Do you want to delete this GRN Order \n' + rowOb.grnCode);
 
     if (userConfirm) {
-        let serverResponse = ajaxRequestBody("/purchase-order/delete", "DELETE", rowOb);
+        let serverResponse = ajaxRequestBody("/grn/delete", "DELETE", rowOb);
         if (serverResponse == "OK") {
             alert('Delete Successfully......!' );
             //need to refresh table and form
-            refreshPOderTable();
+            refreshGrnTable();
 
         } else {
             alert('Delete Not Successfully....! Have Some Errors \n' + serverResponse);

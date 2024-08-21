@@ -45,8 +45,14 @@ public class SupplierController {
 
     @GetMapping("/list")
     public List<Supplier> getSupplierList(){
-
+        // get active supplier list
         return supplierService.getSupplierList();
+    }
+
+    @GetMapping("/list/grn")
+    public List<Supplier> getGrnSupplierList(){
+
+        return supplierService.getGrnSupplierList();
     }
 
     @RequestMapping("/ui")

@@ -49,6 +49,12 @@ public class PurchaseOrderController {
 
         return purchaseOrderService.getPurchaseOrderStatusList();
     }
+
+    @GetMapping("/supplier/{supId}")
+    public List<PurchaseOrder> getPurchaseOrdersBySupplier(@PathVariable("supId") Integer supplierId){
+
+        return purchaseOrderService.getPurchaseOrdersBySupplier(supplierId);
+    }
     
     @RequestMapping("/ui")
     public ModelAndView materialUI(){

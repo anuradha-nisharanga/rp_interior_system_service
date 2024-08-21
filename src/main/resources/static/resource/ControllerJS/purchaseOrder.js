@@ -96,16 +96,16 @@ const getMaterialList = () => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.purchaseOrderStatus.name === 'Requested') {
-        return '<p class= "btn btn-outline-info">' + rowOb.purchaseOrderStatus.name +'</p>';
+        return '<p class= "btn btn-outline-info btn-sm mt-3">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Received') {
-        return '<p class = "btn btn-outline-success">' + rowOb.purchaseOrderStatus.name +'</p>';
+        return '<p class = "btn btn-outline-success btn-sm mt-3">' + rowOb.purchaseOrderStatus.name +'</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Cancel') {
-        return '<p class= "btn btn-outline-warning">' + rowOb.purchaseOrderStatus.name + '</p>';
+        return '<p class= "btn btn-outline-warning btn-sm mt-3">' + rowOb.purchaseOrderStatus.name + '</p>';
     }
     if (rowOb.purchaseOrderStatus.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.purchaseOrderStatus.name + '</p>';
+        return '<p class= "btn btn-outline-danger btn-sm mt-3">' + rowOb.purchaseOrderStatus.name + '</p>';
     }
 }
 const getTotalAmount = (rowOb) => {
@@ -221,11 +221,23 @@ const innerTableRefill = (rowOb, index) => {
 
 const buttonInnerPurchaseUpdate = () => {
 
+    let innerUpdates = "";
+
+    if (pOrderUnitPrice.value != purchaseOrder.materialList[innerRowInd].unitPrice){
+        innerUpdates = innerUpdates + 'Unit Price changed...! \n';
+    }
+
     if (pOrderQuantity.value != purchaseOrder.materialList[innerRowInd].orderQty){
-        let userConfirmToUpdateInnerForm = confirm("are you sure to update the quantity?");
+
+        innerUpdates = innerUpdates + 'Order Quantity changed...! \n';
+    }
+
+    if (innerUpdates != ""){
+        let userConfirmToUpdateInnerForm = confirm("are you sure to update the ?" + innerUpdates);
         if (userConfirmToUpdateInnerForm){
             purchaseOrder.materialList[innerRowInd].orderQty = pOrderQuantity.value;
             purchaseOrder.materialList[innerRowInd].linePrice = pOrderLineCost.value;
+            purchaseOrder.materialList[innerRowInd].unitPrice = pOrderUnitPrice.value;
             refreshInnerPOrderFormAndTable();
             updateTotalAmount();
         }
@@ -233,6 +245,20 @@ const buttonInnerPurchaseUpdate = () => {
     else {
         alert("Noting to Update! ")
     }
+
+
+    // if (pOrderQuantity.value != purchaseOrder.materialList[innerRowInd].orderQty){
+    //     let userConfirmToUpdateInnerForm = confirm("are you sure to update the quantity?");
+    //     if (userConfirmToUpdateInnerForm){
+    //         purchaseOrder.materialList[innerRowInd].orderQty = pOrderQuantity.value;
+    //         purchaseOrder.materialList[innerRowInd].linePrice = pOrderLineCost.value;
+    //         refreshInnerPOrderFormAndTable();
+    //         updateTotalAmount();
+    //     }
+    // }
+    // else {
+    //     alert("Noting to Update! ")
+    // }
 }
 
 const innerTableDelete = (rowOb, index) => {
@@ -367,6 +393,7 @@ const updateTotalAmount =() =>{
 }
 
 const filterMaterial  = () =>{
+
     materialsBySupplier = ajaxGetRequest("/material/supplier-provide/" + JSON.parse(pSupplierList.value).id )
     fillDataIntoSelect( purchaseOrderMaterial, 'Select Material *', materialsBySupplier, 'name','');
 }

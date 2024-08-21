@@ -1,12 +1,14 @@
 package com.bit.rp_interior_system.service.impl;
 
 import com.bit.rp_interior_system.model.*;
+import com.bit.rp_interior_system.repository.MaterialRepository;
 import com.bit.rp_interior_system.repository.PurchaseOrderRepository;
 import com.bit.rp_interior_system.repository.PurchaseOrderStatusRepository;
 import com.bit.rp_interior_system.repository.UserRepository;
 import com.bit.rp_interior_system.service.PrivilegeService;
 import com.bit.rp_interior_system.service.PurchaseOrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final PrivilegeService privilegeService;
     private final PurchaseOrderStatusRepository purchaseOrderStatusRepository;
     private final UserRepository userRepository;
+    private final MaterialRepository materialRepository;
 
     @Override
     public List<PurchaseOrder> getPurchaseOrders() {
@@ -72,6 +76,14 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
             for (PurchaseOrderHasMaterial pOrderMaterial : purchaseOrder.getMaterialList()){
                 pOrderMaterial.setPurchaseOrder(purchaseOrder);
+
+                Optional<Material> OptionalMaterial = materialRepository.findById(pOrderMaterial.getMaterial().getId());
+                if (OptionalMaterial.isPresent()){
+                    Material material = OptionalMaterial.get();
+                    material.setUnitPrice(pOrderMaterial.getUnitPrice());
+                    log.info("material ID: {} | unit price : {}", pOrderMaterial.getId(), pOrderMaterial.getUnitPrice() );
+                    materialRepository.save(material);
+                }
             }
             purchaseOrderRepository.save(purchaseOrder);
 
@@ -104,6 +116,14 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
             for (PurchaseOrderHasMaterial pOrderMaterial : purchaseOrder.getMaterialList()){
                 pOrderMaterial.setPurchaseOrder(purchaseOrder);
+
+                Optional<Material> OptionalMaterial = materialRepository.findById(pOrderMaterial.getMaterial().getId());
+                if (OptionalMaterial.isPresent()){
+                    Material material = OptionalMaterial.get();
+                    material.setUnitPrice(pOrderMaterial.getUnitPrice());
+                    log.info("material ID: {} | unit price : {}", pOrderMaterial.getId(), pOrderMaterial.getUnitPrice() );
+                    materialRepository.save(material);
+                }
             }
             purchaseOrderRepository.save(purchaseOrder);
 
@@ -142,5 +162,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             return "Delete not completed : " + e.getMessage();
         }
 
+    }
+
+    @Override
+    public List<PurchaseOrder> getPurchaseOrdersBySupplier(Integer supplierId) {
+
+        return purchaseOrderRepository.getPurchaseOrdersBySupplier(supplierId);
     }
 }

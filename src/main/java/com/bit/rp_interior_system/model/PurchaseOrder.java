@@ -66,4 +66,9 @@ public class PurchaseOrder {
 
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseOrderHasMaterial> materialList;
+
+    public PurchaseOrder(Integer id, String purchaseOrderCode){
+        this.id = id;
+        this.purchaseOrderCode = purchaseOrderCode;
+    }
 }

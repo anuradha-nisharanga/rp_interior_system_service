@@ -9,6 +9,9 @@ import java.util.List;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
-    @Query("select new Supplier(s.id, s.name) from Supplier s where s.status = true ")
+    @Query("SELECT new Supplier(s.id, s.name) from Supplier s where s.status = true ")
     List<Supplier> list();
+
+    @Query("SELECT distinct new Supplier(s.id, s.name) from Supplier s INNER JOIN GRN g ON s.id = g.supplier.id")
+    List<Supplier> getGrnSupplierList();
 }

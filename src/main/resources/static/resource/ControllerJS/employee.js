@@ -100,23 +100,23 @@ const printEmployee = (rowOb, rowInd) => {
 const getStatus = (rowOb) =>{
     console.log('status')
     if (rowOb.status.name === 'Resign') {
-        return '<p class= "btn btn-outline-success">' + rowOb.status.name +'</p>';
+        return '<p class= "btn btn-outline-success btn-sm mt-3">' + rowOb.status.name +'</p>';
     }
     if (rowOb.status.name === 'Working') {
-        return '<p class = "btn btn-outline-dark">' + rowOb.status.name +'</p>';
+        return '<p class = "btn btn-outline-dark btn-sm mt-3">' + rowOb.status.name +'</p>';
     }
     if (rowOb.status.name === 'Deleted') {
-        return '<p class= "btn btn-outline-danger">' + rowOb.status.name + '</p>';
+        return '<p class= "btn btn-outline-danger btn-sm mt-3">' + rowOb.status.name + '</p>';
     }
 }
 
 const getDesignation = (rowOb) =>{
     console.log('status')
     if (rowOb.designation.name === 'Admin') {
-        return '<p class= "btn btn-outline-success">' + rowOb.designation.name +'</p>';
+        return '<p class= "btn btn-outline-success btn-sm mt-3">' + rowOb.designation.name +'</p>';
     }
     if (rowOb.designation.name === 'Manager') {
-        return '<p class = "btn btn-outline-dark">' + rowOb.designation.name +'</p>';
+        return '<p class = "btn btn-outline-dark btn-sm mt-3">' + rowOb.designation.name +'</p>';
     }
 }
 
