@@ -36,6 +36,22 @@ const fillDataIntoTable= (tableId, dataList, propertyList, editButtonFunction, d
        if (itemob.datatype == 'number'){
            td.innerText = dataList[ind][itemob.property];
        }
+
+        if (itemob.datatype == 'photoarray') {
+            let img = document.createElement("img");
+            img.style.width = "70px";
+            img.style.height = "70px";
+            img.style.padding = "10px";
+            if(dataList[ind][itemob.property] == null){
+                img.src = "/resource/Images/profile-img.png"
+            }else{
+                img.src = atob(dataList[ind][itemob.property]);
+            }
+
+            // tr.appendChild(img);
+            td.appendChild(tr.appendChild(img));
+        }
+
        tr.appendChild(td);
 
     }

@@ -22,6 +22,12 @@ const refreshEmployeeTable = () =>{
 
     fillDataIntoTable(employeeTable, employees ,displayProperty ,refillEmployeeForm, deleteEmployees, printEmployee, true, userPrivilege);
 
+    $('#employeeTable').dataTable({
+        "responsive": true,
+        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
+
     //disable delete button
     employees.forEach((element, index) => {
         if(element.status.name === "Deleted"){
@@ -31,11 +37,6 @@ const refreshEmployeeTable = () =>{
         }
     });
 
-    $('#employeeTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
 }
 
 //create refill function

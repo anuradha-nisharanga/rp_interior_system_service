@@ -24,6 +24,12 @@ const refreshGrnTable = () =>{
 
     fillDataIntoTable(grnTable, GRNList ,displayProperty ,refillPGrnForm, deleteGRN, printPOrder, true, userPrivilege);
 
+    $('#grnTable').dataTable({
+        "responsive": true,
+        "scrollX": false,// Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
+
     //disable delete button
     GRNList.forEach((element, index) => {
         if(element.grnStatus.name === "Deleted"){
@@ -33,11 +39,7 @@ const refreshGrnTable = () =>{
         }
     });
 
-    $('#grnTable').dataTable({
-        "responsive": true,
-        "scrollX": false,// Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
+
 }
 
 //create refill function

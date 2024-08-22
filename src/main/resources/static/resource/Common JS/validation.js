@@ -177,3 +177,30 @@ const checkBoxValidator =(feildId ,pattern, object, property,trueValue,falseValu
         }
     }
 }
+
+/*Image file validator*/
+const validatefilefeild = (feildId,object,propertyOne,properyTwo, oldObject,priviId,nameFieldId) =>{
+
+    if(feildId.value != ""){
+
+        console.log(feildId.files);
+        let file =  feildId.files[0];
+        nameFieldId.value = file['name'];
+
+        window[object][properyTwo]= file['name'];
+
+        let fileReader = new FileReader();
+
+        fileReader.onload = function(e){
+            priviId.src = e.target.result;
+
+            window[object][propertyOne]= btoa(e.target.result);
+        }
+
+        fileReader.readAsDataURL(file);
+
+        return;
+
+    }
+
+}

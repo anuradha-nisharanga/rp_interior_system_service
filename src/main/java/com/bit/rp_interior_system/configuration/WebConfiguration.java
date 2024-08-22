@@ -21,7 +21,6 @@ public class WebConfiguration {
                             .requestMatchers("/create-admin").permitAll()
                             .requestMatchers("/login").permitAll()
                             .requestMatchers("/error").permitAll()
-                            .requestMatchers("/index").permitAll()
                             .requestMatchers("/dashboard").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/index").hasAnyAuthority("Admin","Manager","Production-Manager","Store-Manager","Finance-Manager")
                             .requestMatchers("/employee/**").hasAnyAuthority("Admin","Manager")

@@ -19,6 +19,11 @@
             <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
         </div>
         <div class="right col-10">
+
+            <div class="container mb-5 mt-3">
+                <h1 class="h2">Privilege Management</h1>
+            </div>
+
             <div class="d-flex justify-content-md-end flex-wrap flex-md-nowrap align-items-center mt-4 pt-3 pb-2 mb-3 border-bottom">
                 <button type="button" class="btn btn-secondary btn-sm" style="margin-right: 25px;">Print Table</button>
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPrivilegeAddForm" >Add Privilege</button>
@@ -107,11 +112,15 @@
                     </div>
                 </div>
             </div>
+            <footer class="pt-5 d-flex justify-content-between" th:replace =" ~{ common/footer :: footerFragment }"></footer>
         </div>
     </div>
-
 </div>
 </body>
+<!--link JQuery-->
+<script src="/resource/Common%20JS/jquery.js"></script>
+<!--link datatable js file -->
+<script src="/resource/DataTables-1.13.8/js/jquery.dataTables.js"></script>
 <script src ="/resource/ControllerJS/privilege.js"></script>
 <script src="/resource/Common%20JS/sidebar.js"></script>
 </html>

@@ -22,6 +22,12 @@ const refreshPrivilegeTable = () =>{
 
     fillDataIntoTable(privilegeTable, priveleges ,displayProperty ,refillUserForm, deletePrivilege, printUser, true, userPrivilege);
 
+    $('#privilegeTable').dataTable({
+        "responsive": true,
+        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
+    });
+
     //disable delete button after deleting record
     priveleges.forEach((element, index) => {
         if (element.view === false && element.create === false && element.edit === false && element.remove === false)

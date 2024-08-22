@@ -23,19 +23,18 @@ const refreshMaterialTable = () =>{
 
     fillDataIntoTable(materialTable, materials ,displayProperty ,refillMaterialForm, deleteMaterials, printEmployee, true, userPrivilege);
 
-    //disable delete button
-    materials.forEach((element, index) => {
-        if(element.status === false){
-            materialTable.children[1].children[index].children[8].children[1].disabled = true; //you can also use "disabled"
-        }
-    });
-
     $('#materialTable').dataTable({
         "responsive": true,
         // "scrollX": 500, // Enable horizontal scrollbar
         "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
     });
 
+    //disable delete button
+    materials.forEach((element, index) => {
+        if(element.status === false){
+            materialTable.children[1].children[index].children[8].children[1].disabled = true; //you can also use "disabled"
+        }
+    });
 
 }
 

@@ -21,6 +21,12 @@ const refreshSupplierTable = () =>{
 
     fillDataIntoTable(supplierTable, suppliers, displayProperty ,refillSupplierForm, deleteMaterials, printSupplier, true, userPrivilege);
 
+    $('#supplierTable').dataTable({
+        "responsive": true,
+        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
+    });
+
     suppliers.forEach((element, index) => {
         if(element.status === false){
             console.log("Status check:" + element.status)
@@ -30,11 +36,7 @@ const refreshSupplierTable = () =>{
         }
     });
 
-    $('#supplierTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
-    });
+
 }
 
 //create refill function

@@ -22,6 +22,12 @@ const refreshPOderTable = () =>{
 
     fillDataIntoTable(pOrderTable, purchaseOrders ,displayProperty ,refillPOrderForm, deletePOrder, printPOrder, true, userPrivilege);
 
+    $('#pOrderTable').dataTable({
+        "responsive": true,
+        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
+
     //disable delete button
     purchaseOrders.forEach((element, index) => {
         if(element.purchaseOrderStatus.name === "Deleted"){
@@ -31,11 +37,6 @@ const refreshPOderTable = () =>{
         }
     });
 
-    $('#pOrderTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
 }
 
 //create refill function

@@ -1,97 +1,149 @@
-<!doctype html>
-<html lang="en">
-<head th:replace = "~{common/header :: headerModuleFragment}">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login page</title>
-</head>
-<body style="background-color: rgba(248, 124, 41,0.367);">
-    <div class="container-md col-3 mt-5" >
-        <div class="card">
-            <div class="card-title login-card mt-0">
-                <h2 style="text-align: center"> RP Interiors System</h2>
-                <h2 style="text-align: center">Login</h2>
-            </div>
-            <div class="card-body">
-                <form action="/login" method="post">
-                    <div class="mb-3">
-                        <label for="textUsername" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="textUsername"
-                               aria-describedby="emailHelp" name="username" required>
-<!--                        <div class="invalid-feedback">-->
-<!--                            Invalid Username-->
-<!--                        </div>-->
-<!--                        <div class="valid-feedback">-->
-<!--                        </div>-->
-<!--                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
-                    </div>
-                    <div class="mb-3">
-                        <label for="textPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="textPassword" name="password">
-<!--                        <div class="invalid-feedback">-->
-<!--                            Invalid Password-->
-<!--                        </div>-->
-<!--                        <div class="valid-feedback">-->
-<!--                        </div>-->
-                    </div>
-<!--                    <div class="mb-3 form-check">-->
-<!--                        <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
-<!--                        <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head th:replace = "~{common/header :: headerModuleFragment}">-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport"-->
+<!--          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">-->
+<!--    <meta http-equiv="X-UA-Compatible" content="ie=edge">-->
+<!--    <title>Login page</title>-->
+<!--</head>-->
+<!--<body style="background-color: rgba(248, 124, 41,0.367);">-->
+<!--    <div class="container-md col-3 mt-5" >-->
+<!--        <div class="card">-->
+<!--            <div class="card-title login-card mt-0">-->
+<!--                <h2 style="text-align: center"> RP Interiors System</h2>-->
+<!--                <h2 style="text-align: center">Login</h2>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <form action="/login" method="post">-->
+<!--                    <div class="mb-3">-->
+<!--                        <label for="textUsername" class="form-label">Username</label>-->
+<!--                        <input type="text" class="form-control" id="textUsername"-->
+<!--                               aria-describedby="emailHelp" name="username" required>-->
+<!--&lt;!&ndash;                        <div class="invalid-feedback">&ndash;&gt;-->
+<!--&lt;!&ndash;                            Invalid Username&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="valid-feedback">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>&ndash;&gt;-->
 <!--                    </div>-->
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+<!--                    <div class="mb-3">-->
+<!--                        <label for="textPassword" class="form-label">Password</label>-->
+<!--                        <input type="password" class="form-control" id="textPassword" name="password">-->
+<!--&lt;!&ndash;                        <div class="invalid-feedback">&ndash;&gt;-->
+<!--&lt;!&ndash;                            Invalid Password&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="valid-feedback">&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--&lt;!&ndash;                    <div class="mb-3 form-check">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <input type="checkbox" class="form-check-input" id="exampleCheck1">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <label class="form-check-label" for="exampleCheck1">Check me out</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                    <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--    <script>-->
+<!--        // Example starter JavaScript for disabling form submissions if there are invalid fields-->
+
+<!--        function validateFields() {-->
+<!--            var usernameField = document.getElementById('textUsername');-->
+<!--            var passwordField = document.getElementById('textPassword');-->
+<!--            var username = usernameField.value;-->
+<!--            var password = passwordField.value;-->
+
+<!--            if (username !== 'Admin') {-->
+<!--                usernameField.classList.add('is-invalid');-->
+<!--                usernameField.classList.remove('is-valid');-->
+<!--            } else {-->
+<!--                usernameField.classList.remove('is-invalid');-->
+<!--                usernameField.classList.add('is-valid');-->
+<!--            }-->
+
+<!--            if (password !== '1234') {-->
+<!--                passwordField.classList.add('is-invalid');-->
+<!--                passwordField.classList.remove('is-valid');-->
+<!--            } else {-->
+<!--                passwordField.classList.remove('is-invalid');-->
+<!--                passwordField.classList.add('is-valid');-->
+<!--            }-->
+<!--        }-->
+
+<!--        (function () {-->
+<!--            'use strict'-->
+
+<!--            // Fetch all the forms we want to apply custom Bootstrap validation styles to-->
+<!--            var forms = document.querySelectorAll('.needs-validation')-->
+
+<!--            // Loop over them and prevent submission-->
+<!--            Array.prototype.slice.call(forms)-->
+<!--                .forEach(function (form) {-->
+<!--                    form.addEventListener('submit', function (event) {-->
+
+<!--                        if (!form.checkValidity() || !validateFields()) {-->
+<!--                            event.preventDefault();-->
+<!--                            event.stopPropagation();-->
+<!--                        }-->
+
+<!--                        form.classList.add('was-validated')-->
+<!--                    }, false)-->
+<!--                })-->
+<!--        })()-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace =" ~{ common/header :: headerFragment }">
+
+</head>
+<body style="background-color: rgba(180, 145, 200, 0.5);">
+<section class="py-3 py-md-5"  >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card-sm border border-light-subtle rounded-3 shadow-sm" style="background-color:whitesmoke">
+                    <div class="card-body p-3 p-md-4 p-xl-5">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="mt-3 mb-1">
+                                <h5 class="login-topic" style="font-family: 'Cormorant SC';">RP Interior Login</h5>
+                            </div>
+                        </div>
+                        <h2 class="fs-6 fw-normal text-center text-secondary mb-4">Sign in to your account</h2>
+                        <form action="/login" method="post">
+                            <div class="row gy-2 overflow-hidden">
+                                <div class="col-12">
+                                    <div class="col-12">
+                                        <input class="form-control"  type="text" name="username" id="textUserName" placeholder="Username" required>
+
+                                    </div>
+                                </div>
+                                <div class="col-12">
+
+                                    <input class="form-control"  type="password" name="password" id="textPassword"  placeholder="Password" required>
+
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-grid my-3">
+                                        <button class="btn btn-md" type="submit" style="background-color:#3E4353; color: white;">Sign in</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center text-danger" style="height: 40px; width: 100%; background-color: rgba(209, 39, 39, 0.623); box-shadow: 0 0 0 0.2rem #fecbe67e; color: bisque;" th:if="${param.error}">
+                                <p style="padding: 2px;">Invalid Username or Password!</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-
-        function validateFields() {
-            var usernameField = document.getElementById('textUsername');
-            var passwordField = document.getElementById('textPassword');
-            var username = usernameField.value;
-            var password = passwordField.value;
-
-            if (username !== 'Admin') {
-                usernameField.classList.add('is-invalid');
-                usernameField.classList.remove('is-valid');
-            } else {
-                usernameField.classList.remove('is-invalid');
-                usernameField.classList.add('is-valid');
-            }
-
-            if (password !== '1234') {
-                passwordField.classList.add('is-invalid');
-                passwordField.classList.remove('is-valid');
-            } else {
-                passwordField.classList.remove('is-invalid');
-                passwordField.classList.add('is-valid');
-            }
-        }
-
-        (function () {
-            'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.querySelectorAll('.needs-validation')
-
-            // Loop over them and prevent submission
-            Array.prototype.slice.call(forms)
-                .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-
-                        if (!form.checkValidity() || !validateFields()) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    </script>
+</section>
+<footer class="pt-5 d-flex fixed-bottom justify-content-between" th:replace =" ~{ common/footer :: footerFragment }"></footer>
 </body>
 </html>

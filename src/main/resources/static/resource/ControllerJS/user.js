@@ -13,13 +13,19 @@ const refreshUserTable = () =>{
 
     users = ajaxGetRequest("/user/find");
 
-        const displayProperty = [
+    const displayProperty = [
         {property:'username', datatype:'string'},
         {property:'email', datatype:'string'},
         {property:getRole, datatype:'function'},
         {property:getStatus, datatype:'function'}]
 
     fillDataIntoTable(userTable, users ,displayProperty ,refillUserForm, deleteUser, printUser, true, userPrivilege);
+
+    $('#userTable').dataTable({
+        "responsive": true,
+        // "scrollX": 500, // Enable horizontal scrollbar
+        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
 
     //disable delete button after deleting record
     users.forEach((element, index) => {
@@ -406,7 +412,6 @@ const deleteUser =(rowOb, rowInd) =>{
             alert('Delete Successfully......!' );
             //need to refresh table and form
             refreshUserTable();
-
 
         } else {
             alert('Delete Not Sucessfully....! Have Some Errors \n' + serverResponse);
