@@ -22,6 +22,13 @@ const refreshEmployeeTable = () =>{
 
     fillDataIntoTable(employeeTable, employees ,displayProperty ,refillEmployeeForm, deleteEmployees, printEmployee, true, userPrivilege);
 
+    $("#employeeTable").dataTable({
+        destroy:true,
+        responsive: true,
+        // scrollX: true,// Enable horizontal scrollbar
+        scrollY: 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
+
     //disable delete button
     employees.forEach((element, index) => {
         if(element.status.name === "Deleted"){
@@ -31,11 +38,6 @@ const refreshEmployeeTable = () =>{
         }
     });
 
-    $('#employeeTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
 }
 
 //create refill function
@@ -57,7 +59,6 @@ const refillEmployeeForm =(rowOb,rowInd)=>{
     employeeAddress.value = employee.address;
     employeeStatus.value = employee.status;
     employeeDesignation.value = employee.designation;
-
 
     if(employee.landno != null)
         employeeLand.value = employee.landno;else employeeLand.value = "";
@@ -81,14 +82,14 @@ const refillEmployeeForm =(rowOb,rowInd)=>{
 
     console.log(userPrivilege);
 
-    buttonEmployeeAdd.disabled = "true";
+    buttonEmployeeAdd.disabled = true;
     $("#buttonEmployeeAdd").css("cursor","not-allowed");
 
     if(userPrivilege.update) {
-        buttonEmployeeUpdate.disabled = "";
+        buttonEmployeeUpdate.disabled = false;
         $("#buttonEmployeeUpdate").css("cursor","pointer");
     }else{
-        buttonEmployeeUpdate.disabled = "true";
+        buttonEmployeeUpdate.disabled = true;
         $("#buttonEmployeeUpdate").css("cursor","not-allowed");
     }
 }

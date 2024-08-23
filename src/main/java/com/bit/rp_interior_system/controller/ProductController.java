@@ -58,6 +58,12 @@ public class ProductController {
         return productService.getProductCategoryList();
     }
 
+    @GetMapping("/active-list")
+    public List<Product> getActiveProductList(){
+
+        return productService.getActiveProductList();
+    }
+
     @RequestMapping("/ui")
     public ModelAndView viewUI(){
 

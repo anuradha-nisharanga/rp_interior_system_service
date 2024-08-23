@@ -82,4 +82,11 @@ public class Product {
     @Column(name = "deleted_user")
     private Integer deletedUser;
 
+    public Product(Integer id, String name, String code, BigDecimal price ){
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.price = price;
+    }
+
 }

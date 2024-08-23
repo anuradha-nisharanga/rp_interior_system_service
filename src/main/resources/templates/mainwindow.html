@@ -1,13 +1,97 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<head th:replace = "~{common/header :: headerFragment}">
 </head>
+<head>
+    <!-- CSS Styles for the background image and text overlay -->
+    <style>
+        .dashboard-main {
+            background-image: url('/resource/Images/index.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            height: 100vh;
+            color: white;
+        }
+
+        .text-overlay-container {
+            position: relative;
+            height: 100%;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5); /* Optional background for better contrast */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
 <body>
-<h1>Main Window Index Page</h1>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="left col-2">
+            <!--Side Bar-->
+            <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
+        </div>
+
+        <div class="right col-10">
+
+            <!-- Top Nav Bar-->
+            <nav class="p-3" th:replace =" ~{ common/navbar :: navbarfragment }">
+            </nav>
+
+            <main class="col-md-9 ml-sm-auto col-lg-12 px-md-4 py-4 dashboard-main">
+                <div class="container text-overlay-container">
+                    <div class="row content">
+                        <div>
+                            <div class="content text-overlay">
+                                <h1>Welcome <br>to<br> RP Interiors</h1>
+                                <p>RP Interiors specializes in crafting high-quality tables,
+                                    <br> including TV stands, computer tables, study tables, conference tables, and coffee tables.
+                                    <br>We blend expert craftsmanship with modern design
+                                    <br>to offer durable and stylish tables for every space.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="pt-5 d-flex justify-content-between" th:replace =" ~{ common/footer :: footerFragment }">
+            </footer>
+        </div>
+    </div>
+</div>
+<script>
+    /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content */
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
 </body>
-</html>

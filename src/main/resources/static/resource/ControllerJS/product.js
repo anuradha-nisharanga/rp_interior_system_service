@@ -25,13 +25,20 @@ const refreshProductTable = () =>{
             {property:getCategory, datatype:'function'},
             {property:'name', datatype:'string'},
             {property:getProductPrice, datatype:'function'},
-            {property:getImage, datatype:'function'},
+            {property:'image', datatype:'photoarray'},
             {property:'availableQty', datatype:'string'},
             {property:'reorderLevel', datatype:'string'},
             {property:getStatus, datatype:'function'}]
 
 
     fillDataIntoTable(productTable, ProductList ,displayProperty ,refillProductForm, deleteProduct, printPOrder, true, userPrivilege);
+
+    $("#productTable").dataTable({
+        destroy:true,
+        responsive: true,
+        scrollX: 3000,// Enable horizontal scrollbar
+        scrollY: 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
 
     //disable delete button
     ProductList.forEach((element, index) => {
@@ -42,11 +49,6 @@ const refreshProductTable = () =>{
         }
     });
 
-    $('#productTable').dataTable({
-        "responsive": true,
-        "scrollX": 2000,// Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
 }
 
 //create refill function
@@ -56,7 +58,16 @@ const refillProductForm =(rowOb,rowInd)=>{
     product = JSON.parse(JSON.stringify(rowOb));
     oldProduct = JSON.parse(JSON.stringify(rowOb));
 
-    productImage.value = product.image;
+    // refill image
+    if(product.image == null){
+        imgUserphoto.src = "/resource/Images/profile-img";
+        textUserphoto.value = "";
+    }else{
+        imgUserphoto.src = atob(product.image);
+        textUserphoto.value = product.imagePath;
+    }
+
+    // productImage.value = product.image;
     productMaterialCost.value = product.materialCost;
     productName.value = product.name;
     productPrice.value = product.price;
@@ -137,8 +148,13 @@ const reFreshProductForm = () => {
 
 
     //need to empty all element
-    productImage.value = '';
-    productImage.style.border = '1px solid #ced4da';
+    // productImage.value = '';
+    // productImage.style.border = '1px solid #ced4da';
+
+    product.image = null;
+    fileuserphoto.files = null;
+    imgUserphoto.src = "/resource/Images/profile-img.png";
+    textUserphoto.value= "";
 
     productMaterialCost.value = 'Total Material Cost';
     productMaterialCost.disabled = true;
@@ -179,7 +195,6 @@ const refreshInnerProductFormAndTable = () =>{
 
     productMaterial = {};
     oldproductMaterial = null;
-
 
     availableMaterialsForProduct = ajaxGetRequest("/material/view");
     fillDataIntoSelect( productMaterials, 'Select Material *', availableMaterialsForProduct, 'name');
@@ -590,5 +605,24 @@ const deleteProduct =(rowOb, rowInd) => {
         } else {
             alert('Delete Not Successfully....! Have Some Errors \n' + serverResponse);
         }
+    }
+}
+
+const buttonClearImage =() =>{
+    if(product.image != null){
+        const userConfirm = confirm("Are you sure to reset product photo...?");
+
+        if(userConfirm){
+            product.image = null;
+            fileuserphoto.files = null;
+            imgUserphoto.src = "/resource/Images/profile-img.png";
+            textUserphoto.value = "";
+
+        }
+    }else{
+        product.image = null;
+        imgUserphoto.src = "/resource/Images/profile-img.png";
+        textUserphoto.value="";
+
     }
 }

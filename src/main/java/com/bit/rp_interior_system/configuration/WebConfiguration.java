@@ -21,7 +21,6 @@ public class WebConfiguration {
                             .requestMatchers("/create-admin").permitAll()
                             .requestMatchers("/login").permitAll()
                             .requestMatchers("/error").permitAll()
-                            .requestMatchers("/index").permitAll()
                             .requestMatchers("/dashboard").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/index").hasAnyAuthority("Admin","Manager","Production-Manager","Store-Manager","Finance-Manager")
                             .requestMatchers("/employee/**").hasAnyAuthority("Admin","Manager")
@@ -34,6 +33,10 @@ public class WebConfiguration {
                             .requestMatchers("/grn/**").hasAnyAuthority("Admin","Manager","Store-Manager")
                             .requestMatchers("/supplier-payments/**").hasAnyAuthority("Admin","Manager")
                             .requestMatchers("/product/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/production-order/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/production-order-confirm/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/production/**").hasAnyAuthority("Admin","Manager")
+                            .requestMatchers("/sale/**").hasAnyAuthority("Admin","Manager")
                             .anyRequest().authenticated();
 
                 })

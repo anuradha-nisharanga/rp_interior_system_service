@@ -183,6 +183,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public Material getMaterialStockByMaterial(Integer matId) {
+
+        return materialRepository.getMaterialStockByMaterial(matId);
+    }
+
+    @Override
     public List<MaterialCategory> getMaterialCategoryList() {
 
         //login user authentication and authorization

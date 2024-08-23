@@ -23,6 +23,13 @@ const refreshCustomerTable = () =>{
 
     fillDataIntoTable(customerTable, customers ,displayProperty ,refillCustomerForm, deleteEmployees, printEmployee, true, userPrivilege);
 
+    $("#customerTable").dataTable({
+        destroy:true,
+        responsive: true,
+        // scrollX: true,// Enable horizontal scrollbar
+        scrollY: 300 // Enable vertical scrollbar with a height of 200 pixels
+    });
+
     //disable delete button
     customers.forEach((element, index) => {
         if(element.status === false){
@@ -32,11 +39,11 @@ const refreshCustomerTable = () =>{
         }
     });
 
-    $('#customerTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
-    });
+    // $('#customerTable').dataTable({
+    //     "responsive": true,
+    //     // "scrollX": 500, // Enable horizontal scrollbar
+    //     "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    // });
 }
 
 //create refill function

@@ -74,6 +74,12 @@ public class MaterialController {
         return materialService.getSupplierNotProvideMaterials(supplierId);
     }
 
+    @GetMapping("/by-material/{matId}")
+    public Material getMaterialStockByMaterial(@PathVariable ("matId") Integer matId){
+
+        return materialService.getMaterialStockByMaterial(matId);
+    }
+
     @RequestMapping("/ui")
     public ModelAndView materialUI(){
 

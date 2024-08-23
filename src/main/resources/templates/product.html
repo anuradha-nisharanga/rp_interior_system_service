@@ -52,7 +52,7 @@
             <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="modalProductAddForm">
                 <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
-                        <div class="modal-header fw-bold">GRN Details
+                        <div class="modal-header fw-bold">Product Details
                             <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -84,10 +84,18 @@
                                                 <textarea class="form-control" placeholder="leave a note" id="productDescription" cols="30" onkeyup="textFeildValidator(productDescription ,'','product','description')"></textarea>
                                             </div>
 
-                                            <!-- Product Image-->
+<!--                                            &lt;!&ndash; Product Image&ndash;&gt;-->
+<!--                                            <div class="mb-3 col-10">-->
+<!--                                                <label for="productImage" class="form-label fw-bold">Product Image : <span class="text-danger"> * </span></label>-->
+<!--                                                <input type="text" class="form-control" id="productImage" aria-describedby="basic-addon1" onkeyup="textFeildValidator(productImage ,'','product','image')" >-->
+<!--                                            </div>-->
+
                                             <div class="mb-3 col-10">
-                                                <label for="productImage" class="form-label fw-bold">Product Image : <span class="text-danger"> * </span></label>
-                                                <input type="text" class="form-control" id="productImage" aria-describedby="basic-addon1" onkeyup="textFeildValidator(productImage ,'','product','image')" >
+                                                <button type="button" class="btn btn-primary btn-sm" id="btnSelectImage" onclick="fileuserphoto.click()">Add Img</button>
+                                                <button type="button" class="btn btn-info btn-sm" id="btnClearImage" onclick="buttonClearImage();">Clear</button>
+                                                <img src="/resource/Images/profile-img.png" alt="aa" style="height: 50px; width: 50px;" id="imgUserphoto">
+                                                <input type="text" disabled class="form-control" id="textUserphoto" >
+                                                <input type="file" class="form-control d-none" id="fileuserphoto" onchange="validatefilefeild(this,'product','image','imagePath','oldProduct', imgUserphoto, textUserphoto)" >
                                             </div>
 
                                             <!-- Material Cost -->
@@ -202,9 +210,9 @@
                     </div>
                 </div>
             </div>
+            <footer class="pt-5 d-flex justify-content-between" th:replace =" ~{ common/footer :: footerFragment }"></footer>
         </div>
     </div>
-
 </div>
 
 <!--link JQuery-->
