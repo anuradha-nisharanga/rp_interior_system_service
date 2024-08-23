@@ -28,4 +28,7 @@ public interface MaterialRepository  extends JpaRepository<Material, Integer>{
     @Query(value = "SELECT NEW Material (m.id, m.code, m.name, m.unitPrice) FROM Material m WHERE m.id " +
             "IN (SELECT pohm.material.id FROM PurchaseOrderHasMaterial pohm WHERE pohm.purchaseOrder.id = :id )")
     List<Material> getMaterialListByPurchaseOrder(@Param("id") Integer purchaseOrderId);
+
+    @Query(value = "SELECT m from Material m where m.id=?1")
+    Material getMaterialStockByMaterial(Integer materialId);
 }

@@ -57,6 +57,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getActiveProductList() {
+        return productRepository.getActiveProductList();
+    }
+
+    @Override
     public String createProduct(Product product) {
 
         //login user authentication and authorization

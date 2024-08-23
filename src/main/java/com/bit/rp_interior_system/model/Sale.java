@@ -45,6 +45,8 @@ public class Sale {
     @Column(name = "net_amount")
     private BigDecimal netAmount;
 
+    @Column(name = "note")
+    private String note;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -69,13 +71,11 @@ public class Sale {
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
+    @JoinColumn(name = "sale_status_id", referencedColumnName = "id")
+    private SaleStatus saleStatus;
 
-
-
-    @OneToMany(mappedBy = "grn", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GRNHasMaterial> grnMaterialList;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleHasProduct> productList;
 
 //    public Sale(Integer id, String grnCode, BigDecimal totalAmount, BigDecimal balanceAmount, BigDecimal paidAmount){
 //        this.id = id;

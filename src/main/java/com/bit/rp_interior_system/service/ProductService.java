@@ -16,4 +16,6 @@ public interface ProductService {
     List<ProductStatus> getProductStatusList();
 
     List<ProductCategory> getProductCategoryList();
+
+    List<Product> getActiveProductList();
 }

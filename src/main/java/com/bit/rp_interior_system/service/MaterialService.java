@@ -26,5 +26,7 @@ public interface MaterialService {
     List<Material> getSupplierProvideMaterials(Integer supplierId);
 
     List<Material> getMaterialsByPurchaseOrder(Integer purchaseOrderId);
+
+    Material getMaterialStockByMaterial(Integer matId);
 }
 

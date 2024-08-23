@@ -33,10 +33,11 @@ const refreshProductTable = () =>{
 
     fillDataIntoTable(productTable, ProductList ,displayProperty ,refillProductForm, deleteProduct, printPOrder, true, userPrivilege);
 
-    $('#productTable').dataTable({
-        "responsive": true,
-        "scrollX": 2500,// Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 200 pixels
+    $("#productTable").dataTable({
+        destroy:true,
+        responsive: true,
+        scrollX: 3000,// Enable horizontal scrollbar
+        scrollY: 300 // Enable vertical scrollbar with a height of 200 pixels
     });
 
     //disable delete button

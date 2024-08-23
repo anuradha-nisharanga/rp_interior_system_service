@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace = "~{common/header :: headerModuleFragment}">
+    //define in controller module
+    <title th:replace =" ~{ header :: headerModuleFragment}"></title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav th:replace =" ~{ common/navbar :: navbarfragment }"></nav>
+    </div>
+    <div class="row">
+        <div class="left col-2">
+            <div th:replace =" ~{ common/sidebar :: sidebarfragment }"></div>
+        </div>
+        <div class="right col-10 main-content">
+
+            <!--Topic area-->
+            <div class="container mb-5 mt-3">
+                <h1 class="h2">Production Order Management</h1>
+            </div>
+
+            <div class="d-flex justify-content-md-end flex-wrap flex-md-nowrap align-items-center mt-4 pt-3 pb-2 mb-3 border-bottom">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalProductionOrder" >Add Pro Order</button>
+            </div>
+
+            <!--Table area-->
+            <div class="row mt-5">
+                <table class="table table-striped table-borderless" id="ProductionOrderTable">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Product & Qty</th>
+                        <th scope="col">RequiredDate</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="action-button">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!--Modal & Form -->
+            <div class="modal" data-bs-backdrop="static" data-bs-keyboard="false" id="modalProductionOrder">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header fw-bold">Production Order Details
+                            <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- form body -->
+                            <div class="card-body">
+                                <form onsubmit="return false" id="productionOrderForm">
+                                    <!--Modal Production Order details-->
+                                    <div class="row">
+                                        <!-- Main form left area -->
+                                        <div class="col-6">
+
+                                            <!-- Required Date -->
+                                            <div class="mb-3 col-10">
+                                                <label for="proOrderDate" class="form-label fw-bold">Required Date : <span class="text-danger"> * </span></label>
+                                                <input type="date" class="form-control" id="proOrderDate" onkeydown="return false" onchange="dateFeildValidator(this , '', 'productionOrder','requiredDate')" required>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-6">
+                                            <!-- Main form right area -->
+
+                                            <!-- Select Product Status-->
+                                            <div class="mb-3 col-10">
+                                                <label for="proOrderStatusList" class="form-label fw-bold">Production Status  : <span class="text-danger"> * </span></label>
+                                                <select class="form-select" id = "proOrderStatusList" aria-label="Default select" onchange="selectDFeildValidator(this, '', 'productionOrder', 'productionOrderStatus') ; filterGrnMaterialList()" name ="materialForGrn" required>
+                                                </select>
+                                            </div>
+
+                                            <!-- note -->
+                                            <div class="mb-3 col-10">
+                                                <label for="prodOrderNote" class="form-label fw-bold">Note  : <span class="text-danger"> (Optional) </span></label>
+                                                <textarea class="form-control" placeholder="leave a note" id="prodOrderNote" cols="30" name="note" onkeyup="textFeildValidator(this ,'','productionOrder','note')"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!--Inner Form -->
+                                    <div><p><b>Production Order Inner</b></p></div>
+                                    <hr>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <!-- Select Product-->
+                                            <div class="mb-3 col-10">
+                                                <label for="ProOrderProductList" class="form-label fw-bold">Product  : <span class="text-danger"> * </span></label>
+                                                <select class="form-select" id = "ProOrderProductList" aria-label="Default select" onchange="selectDFeildValidator(this, '', 'proHasProduct', 'product')" name ="unitPrice">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <!-- Qty-->
+                                            <div class="mb-3 col-10">
+                                                <label for="ProOrderProductQty" class="form-label fw-bold">Quantity  : <span class="text-danger"> * </span></label>
+                                                <input type="text" class="form-control" id="ProOrderProductQty" aria-describedby="basic-addon1" onkeyup="textFeildValidator(this ,'^[1-9][0-9]{0,3}$','proHasProduct','orderQty')" name="quantity">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Inner Form Buttons-->
+                                    <div class="row mt-2">
+                                        <div class="d-grid gap-1 d-md-flex justify-content-md-start">
+                                            <button type="reset" class="btn btn-secondary fw-bold me-md-1 btn-sm">Clear</button>
+                                            <button type="button" class="btn btn-primary fw-bold btn-sm" id="productionOrderAdd" onclick="innerProductionOrderAdd()">Add</button>
+                                            <button type="button" class="btn btn-success fw-bold btn-sm" id="productionOrderUpdate" onclick="innerProductionOrderUpdate()">Update</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Inner Table -->
+                                    <hr>
+                                    <div class="row mt-2">
+                                        <div>
+                                            <table class="table table-striped table-borderless" id="productionOrderInnerTable">
+                                                <thead class="table-primary">
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Product</th>
+                                                    <th scope="col">Qty</th>
+                                                    <th scope="col" class="action-button">Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Main form buttons -->
+                                    <div class="row mt-2">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="reset" class="btn btn-secondary fw-bold me-md-1">Reset</button>
+                                            <button type="submit" class="btn btn-primary fw-bold" id="ProOrderAddButton" onclick="buttonProductionOrderAdd()">Submit</button>
+                                            <button type="submit" class="btn btn-success fw-bold" id="ProOrderUpdateButton" onclick="buttonProductionOrderUpdate()">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="pt-5 d-flex justify-content-between" th:replace =" ~{ common/footer :: footerFragment }"></footer>
+        </div>
+    </div>
+</div>
+
+<!--link JQuery-->
+<script src="/resource/Common%20JS/jquery.js"></script>
+<!--link datatable js file -->
+<!--<script src="/resource/DataTables-1.13.8/js/jquery.dataTables.js"></script>-->
+<script src="/resource/ControllerJS/productionOrder.js"></script>
+<script src="/resource/Common%20JS/sidebar.js"></script>
+
+<!-- Link datatable css file -->
+<link rel="stylesheet" href="/resource/datatables-1.13.6/css/jquery.dataTables.min.css">
+
+<!-- Link datatable js file -->
+<script src="/resource/datatables-1.13.6/js/jquery.dataTables.min.js"></script>
+</body>
+</html>

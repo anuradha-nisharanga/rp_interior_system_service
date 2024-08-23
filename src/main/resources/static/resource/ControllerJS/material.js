@@ -23,11 +23,13 @@ const refreshMaterialTable = () =>{
 
     fillDataIntoTable(materialTable, materials ,displayProperty ,refillMaterialForm, deleteMaterials, printEmployee, true, userPrivilege);
 
-    $('#materialTable').dataTable({
-        "responsive": true,
-        // "scrollX": 500, // Enable horizontal scrollbar
-        "scrollY": 300 // Enable vertical scrollbar with a height of 300 pixels
+    $("#materialTable").dataTable({
+        destroy:true,
+        responsive: true,
+        scrollX: 2500,// Enable horizontal scrollbar
+        scrollY: 300 // Enable vertical scrollbar with a height of 200 pixels
     });
+
 
     //disable delete button
     materials.forEach((element, index) => {
